@@ -1,0 +1,53 @@
+---
+title: "Shiny"
+author: "Paul Harrison"
+date: "28 September 2016"
+output: 
+  ioslides_presentation: 
+    widescreen: yes
+runtime: shiny
+---
+
+## Presenting data on the web
+
+Viewing a website requires:
+
+* An HTTP client, such as Firefox or Chrome, which displays HTML documents and runs Javascript code. You the application writer don't have much control over the client, but it's reasonably well standardized.
+
+* An HTTP server, running in the language of your choice with all your favourite libraries on the operating system of your choice.
+
+So much effort has gone into writing great HTTP clients that display HTML that it now makes sense to write desktop applications this way as well! An "application" written in this style can run potentially run *anywhere*. Example: RStudio.
+
+
+## Presenting data on the web
+
+There is a spectrum of choices for where to put most of the cleverness and computation.
+
+* Purely client-side -- The server merely serves static files. All the magic happens in Javascript, client-side.
+
+* RESTful -- The server does the heavy lifting, such as accessing large databases, but doesn't keep track of sessions and state. Client-side Javascript still does quite a lot.
+
+* Stateful server -- The server keeps track of sessions. It possibly runs a separate process per session.
+
+The third option places a lot of load on the server, but is the most flexible.
+
+<div class="notes">
+Pure client can't work with large data, without heroic efforts (Dalliance).
+</div>
+
+
+## Shiny
+
+The `shiny` library makes it easy to build stateful servers. When a user interacts with an "app" it's like using a graphical application written in R.
+
+Other languages:
+
+Python: bokeh
+
+Lighter options:
+
+`plotly` `htmlwidgets`
+
+
+
+
