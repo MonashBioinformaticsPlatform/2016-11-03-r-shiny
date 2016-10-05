@@ -1,0 +1,170 @@
+---
+title: "Shiny Tutorial"
+author: "Paul Harrison"
+date: "28 September 2016"
+output: html_document
+runtime: shiny
+---
+
+# Setup
+
+```{r eval=FALSE}
+install.packages("shiny")
+
+source("https://bioconductor.org/biocLite.R")
+biocLite(c(
+    "BSgenome.Scerevisiae.UCSC.sacCer3",
+    "TxDb.Scerevisiae.UCSC.sacCer3.sgdGene",
+    "GenomicRanges",
+    "rtracklayer",
+    "Gviz"))
+
+
+```
+
+Please make sure you are running R 3.3 and Bioconductor 3.3 or higher. Bioconductor 3.3 in particular is vastly more stable than 3.2.
+
+# Hello, world
+
+```{r}
+
+library(shiny)
+
+ui1 <- fluidPage("Hello, world.")
+
+server1 <- function(input, output, session) { }
+
+app1 <- shinyApp(ui1, server1)
+
+app1
+```
+
+Let's explore what we've just created to understand better what is going on.
+
+```{r}
+class(ui1)
+as.character(ui1)
+
+class(app1)
+```
+
+```{r eval=FALSE}
+# Various ways of running an app
+runApp(app1)
+runGadget(app1)
+runGadget(app1, viewer=dialogViewer("App 1"))
+print(app1)
+app1
+```
+
+Our application `app` can be run using `runApp` or `runGadget`. Oddly, but following the lead of `ggplot2`, it can also be run by printing it out.
+
+
+# input and output
+
+
+# DataTable
+
+
+# Upload challenge {.challenge}
+
+
+
+# Reactive values save time
+
+
+# What you can't see doesn't need to be computed
+
+
+
+# Reactive challenge {.challenge}
+
+Use what you have just learned to make this app more responsive.
+
+...
+
+
+# Genome browser challenge, part 1 {.challenge}
+
+The following code produces a diagram for a region of a genome. Your collaborator is asking you to make diagrams for a whole lot of different locations in the genome. Create a Shiny app to create these diagrams for them.
+
+```{r message=FALSE, warning=FALSE}
+library(GenomicRanges)
+library(Gviz)
+library(rtracklayer)
+library(BSgenome.Scerevisiae.UCSC.sacCer3)
+library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
+
+# We want to be able to interactively specify this location:
+location <- as("chrI:140000-160000", "GRanges")
+
+# You don't need to understand the rest of this code, just wrap it in Shiny.
+
+genome <- BSgenome.Scerevisiae.UCSC.sacCer3
+txdb <- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
+
+axis_track <- GenomeAxisTrack()
+seq_track <- SequenceTrack(genome)
+gene_track <- GeneRegionTrack(txdb, genome=genome, name="Genes", showId=TRUE, shape="arrow")
+
+d1 <- rtracklayer::summary(BigWigFile("forward.bw"), location, 500, "max")[[1]]
+d2 <- rtracklayer::summary(BigWigFile("reverse.bw"), location, 500, "max")[[1]]
+d2$score <- -d2$score
+data_track <- DataTrack(GRangesList(d1,d2), name="PAT-seq", type="l")
+
+plotTracks(
+    list(axis_track, seq_track, gene_track, data_track),
+    chromosome=as.character(seqnames(location)), 
+    from=start(location), 
+    to=end(location))
+```
+
+
+# Escaping from reactive systems
+
+Various ways of escaping from the reactive system exist.
+
+However, first consider if this is necessary. You are breaking the abstraction, which means you need to understand Shiny at a deeper level.
+
+`isolate` - within a reactive expression, peek at reactive values without creating a dependency on them
+
+`observeEvent` - code that executes when, eg, a button is pressed
+
+`eventReactive` - a reactive value that is only updated when, eg, a button is pressed
+
+
+# Pushing back inputs
+
+One reason you might want to break pure reactivity is to provide a quick way to fill in an input.
+
+
+
+# Genome browser challenge, part 2 {.challenge}
+
+Add buttons to your genome browser to navigate left and right, and/or zoom in and out.
+
+
+
+# Modules
+
+
+
+# Module challenge {.challenge}
+
+Adapt your genome browser to be a module.
+
+There is a list of genes of particular interest. Make an app that shows a table of these genes. Use your genome browser module to display a selected gene.
+
+
+
+...solutions...
+
+
+
+
+
+
+
+
+
+

@@ -50,4 +50,29 @@ Lighter options:
 
 
 
+Shiny might not be your long-term solution, but it's probably your initial prototype.
+
+Shiny (and R in genral) is great for people with just a little computing experience.
+
+Example: Your favourite heatmap clustering algorithm in only available in R.
+
+
+
+## Functional style
+
+Reactive code should not have side-effects.
+
+Do not
+
+* modify globals with `<<-`
+
+* mutate data structures <br>(fortunately, R code only uses mutation very rarely)
+
+* plot within a reactive code block <br>(only plot by calling non-reactive code from within `renderPlot`)
+
+* write to a file except, except within `downloadHandler`
+
+unless you know exactly what you are doing, or weird bad things will happen.
+
+
 
