@@ -8,7 +8,7 @@ RS=tutorial.R
 all : $(RS) $(HTMLS)
 
 %.html : %.Rmd
-	Rscript -e 'rmarkdown::render("$<", "all")'
+	Rscript -e 'rmarkdown::render("$<", "all", runtime="static")'
 
 %.R : %.Rmd purify.py
 	python purify.py <$< >$@

@@ -1,8 +1,13 @@
 ---
 title: "Shiny Tutorial"
 author: "Paul Harrison"
-date: "28 September 2016"
-output: html_document
+date: "October 2016"
+output:
+    html_document:
+        toc: true
+        toc_depth: 2
+        theme: cerulean
+        css: style.css
 runtime: shiny
 ---
 
@@ -26,16 +31,14 @@ Please make sure you are running R 3.3 and Bioconductor 3.3 or higher. Bioconduc
 
 # Hello, world
 
-```{r}
-
+```{r message=FALSE}
 library(shiny)
 
-ui1 <- fluidPage("Hello, world.")
+ui1 <- fluidPage(titlePanel("Hello world"))
 
 server1 <- function(input, output, session) { }
 
 app1 <- shinyApp(ui1, server1)
-
 app1
 ```
 
@@ -66,25 +69,175 @@ Our application `app` can be run using `runApp` or `runGadget`. Oddly, but follo
 # DataTable
 
 
-# Upload challenge {.challenge}
+## Upload challenge {.challenge}
 
 
 
-# Reactive values save time
+# Reactive expressions save recomputation
+
+We've seen pieces of code wrapped in functions such as `renderPlot( )`. This is called a "reactive context", and is a common pattern in Shiny. Reactive contexts contain code that might need to be re-run if their inputs change.
+
+Reactive expressions are another kind of reactive context. They provide a way to save computation. Within the server function, a reactive expression is created by wrapping an expression with the function `reactive( )`. To actually obtain the value of the expression, from another reactive context, it is called with no arguments. The code in the reactive expression only needs to be re-run if its inputs have changed, otherwise its cached value can be used. Reactive expressions are *lazy*, they are only computed when they are needed by another reactive context.
+
+A reactive expression can serve as an input to other reactive contexts. If the user enters new values, a branching chain of cached values might be invalidated. Shiny *eagerly* observes outputs, so if this wave of invalidation reaches an output, Shiny recomputes the output and whatever it depends on.
+
+This will make more sense with some examples.
+
+```{r eval=FALSE}
+# Example of a reactive expression
+y <- reactive(input$x + 1)
+
+#or
+y <- reactive({
+    input$x + 1
+})
+
+#or
+y <- reactive({
+    return(input$x + 1)
+})
 
 
-# What you can't see doesn't need to be computed
+#Later, in another reactive context where the value of the expression is needed
+...
+    y()
+...
+```
+
+Let's look at a complete example.
+
+```{r}
+ui_pythagorus <- fluidPage(
+    titlePanel("Hypotenuse app"),
+    sliderInput("a", "Length a", 0, 10, 5),
+    sliderInput("b", "Length b", 0, 10, 5),
+    textOutput("result"))
+    
+server_pythagorus <- function(input, output, server) {
+    a2 <- reactive({
+        cat("Compute a squared.\n")
+        
+        input$a ** 2
+    })
+    
+    b2 <- reactive({
+        cat("Compute b squared.\n")
+        
+        input$b ** 2
+    })
+    
+    output$result <- renderText({
+        cat("Compute hypotenuse.\n")
+        h <- sqrt(a2() + b2())
+        cat("Done computing hypotenuse.\n")
+        
+        paste0("The hypotenuse is ", h)
+    })
+}
+
+shinyApp(ui_pythagorus, server_pythagorus)
+```
+
+Try adjusting one or other of the inputs and observe what is printed to the console.
+
+`cat` has a side effect, printing to the console, which lets us peek at what is going on under the hood here. Except when debugging you should avoid side effects within reactive expressions. Examples of side effects are printing, plotting, or altering global variables with `<<-`. Side effects break the reactive abstraction. For example a `renderPlot( )` should not rely on a `reactive( )` to perform the actual plotting.
+
+( Errors, eg calling `stop( )`, are not considered side effects and are fine in reactive expressions. Errors are cached just like values, and will be correctly thrown to the reactive context attempting to get the value of the reactive expression each time. )
 
 
+## Ronald and Muriel's tea argument {.challenge}
 
-# Reactive challenge {.challenge}
+Muriel and Ronald are having an argument about tea. Muriel claims to be able to tell if tea or milk is poured into a cup first. An experiment is devised to test Muriel's claim. Eight cups of tea are made, four with tea first and four with milk first, and Muriel's accuracy is tested. She classifies all eight cups correctly. The results seem to confirm Muriel's claim, but Ronald wants to know how likely a result like this would have been if Muriel's supposed ability was simply luck.
+
+```{r cache=TRUE}
+permutations <- function(items)
+    do.call(cbind, lapply(seq_along(items), 
+        function(i) rbind(items[i], permutations(items[-i]))))
+
+tea <- 4
+tea_correct <- 4
+milk <- 4
+milk_correct <- 4
+
+x <- c(rep(0,tea), rep(1,milk))
+y <- c(rep(0,tea_correct), rep(1,tea-tea_correct), 
+       rep(0,milk-milk_correct), rep(1,milk_correct))
+statistic <- sum(x == y)
+x_perms <- permutations(x) # <- this is slow
+distribution <- colSums(x_perms == y)
+p <- mean(distribution >= statistic)
+
+p
+```
+
+If Muriel was correct all eight times then Ronald can reasonably abandon the idea that Muriel's ability is due to chance.
+
+We'd like to explore how this test works with different inputs, but avoid unnecessary computation, especially calls to `permutations`. Even with eight cups there were quite a lot of permutations to consider. (It's possible to write much more efficient code than the above. In R you would normally use `fisher.test(x,y,alternative="greater")`. However, for the sake of a slightly silly exercise we will use the above.) 
+
+### Ronald's test as a Shiny app
+
+```{r}
+ui_tea <- fluidPage(
+    titlePanel("Ronald's exact test"),
+    numericInput("tea", "Tea first", 3),
+    numericInput("milk", "Milk first", 3),
+    numericInput("tea_correct", "Tea first correctly called", 2),
+    numericInput("milk_correct", "Milk first correctly called", 2),
+    textOutput("p_text"))
+
+server_tea <- function(input, output, server) {
+    output$p_text <- renderText( withProgress(message="Computing p", {
+        cat("Computing p\n")
+        x <- c(rep(0,input$tea), rep(1,input$milk))
+        y <- c(rep(0,input$tea_correct), rep(1,input$tea-input$tea_correct), 
+               rep(0,input$milk-input$milk_correct), rep(1,input$milk_correct))
+        statistic <- sum(x == y)
+        x_perms <- permutations(x) # <- this is slow
+        distribution <- colSums(x_perms == y)
+        p <- mean(distribution >= statistic)
+        cat("Done\n")
+        
+        paste0("p-value is ",p)
+    }))
+}
+
+shinyApp(ui_tea, server_tea)
+```
+
+### Challenge
 
 Use what you have just learned to make this app more responsive.
 
-...
+The slow part is the call to the `permutations` function. We would like to avoid re-running this unnecessarily.
 
 
-# Genome browser challenge, part 1 {.challenge}
+# tabsetPanel: what you can't see doesn't need to be computed
+
+It is possible to divide your up app up into a set of tabs. One very useful thing about this is that outputs on a tab that aren't currently visible aren't immediately recomputed.
+
+```{r}
+ui_tea_tabset <- fluidPage(
+    titlePanel("Ronald's exact test"),
+    tabsetPanel(
+        tabPanel("Input",
+            br(),
+            numericInput("tea", "Tea first", 3),
+            numericInput("milk", "Milk first", 3),
+            numericInput("tea_correct", "Tea first correctly called", 2),
+            numericInput("milk_correct", "Milk first correctly called", 2)),
+        tabPanel("Result",
+            br(),
+            textOutput("p_text"))))
+
+shinyApp(ui_tea_tabset, server_tea)
+```
+
+Shiny offers three layouts for this with similar functionality: `tabsetPanel`, `navlistPanel`, and `navbarPage`.
+
+There is an older style of user interface in which computations are delayed until a button is pressed. It is possible to do this with Shiny, using `actionButton`, and `observeEvent` to set some `reactiveValues` as a sort of secondary `input`. Also relevant, the `isolate` function lets you look at a reactive value without creating a dependency on it. However, when you must fight against a library this hard it is a hint not to solve the problem this way. Another argument against this approach is that it is now possible to be showing results inconsistent with the inputs. The Shiny deal is that if you conform to the reactive paradigm, Shiny will handle all the difficult work of maintaining a consistent state.
+
+
+## Genome browser challenge, part 1 {.challenge}
 
 The following code produces a diagram for a region of a genome. Your collaborator is asking you to make diagrams for a whole lot of different locations in the genome. Create a Shiny app to create these diagrams for them.
 
@@ -95,42 +248,32 @@ library(rtracklayer)
 library(BSgenome.Scerevisiae.UCSC.sacCer3)
 library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
 
-# We want to be able to interactively specify this location:
-location <- as("chrI:140000-160000", "GRanges")
-
-# You don't need to understand the rest of this code, just wrap it in Shiny.
-
 genome <- BSgenome.Scerevisiae.UCSC.sacCer3
 txdb <- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
 
+# We want to be able to interactively specify this location:
+location <- GRanges("chrI:140000-180000", seqinfo=seqinfo(genome))
+
 axis_track <- GenomeAxisTrack()
 seq_track <- SequenceTrack(genome)
-gene_track <- GeneRegionTrack(txdb, genome=genome, name="Genes", showId=TRUE, shape="arrow")
+gene_track <- GeneRegionTrack(
+    txdb, genome=genome, name="Genes", showId=TRUE, shape="arrow")
 
-d1 <- rtracklayer::summary(BigWigFile("forward.bw"), location, 500, "max")[[1]]
-d2 <- rtracklayer::summary(BigWigFile("reverse.bw"), location, 500, "max")[[1]]
-d2$score <- -d2$score
-data_track <- DataTrack(GRangesList(d1,d2), name="PAT-seq", type="l")
+# Load data, at a reasonable level of detail for width(location)
+n <- min(width(location), 1000)
+d1 <- rtracklayer::summary(
+    BigWigFile("forward.bw"), location, n, "max")[[1]]
+d2 <- rtracklayer::summary(
+    BigWigFile("reverse.bw"), location, n, "max")[[1]]
+data_track <- DataTrack(
+    d1, data=rbind(d1$score,-d2$score), groups=c(1,2), 
+    name="PAT-seq", type=c("l"), col="#000000")
 
 plotTracks(
     list(axis_track, seq_track, gene_track, data_track),
     chromosome=as.character(seqnames(location)), 
-    from=start(location), 
-    to=end(location))
+    from=start(location), to=end(location))
 ```
-
-
-# Escaping from reactive systems
-
-Various ways of escaping from the reactive system exist.
-
-However, first consider if this is necessary. You are breaking the abstraction, which means you need to understand Shiny at a deeper level.
-
-`isolate` - within a reactive expression, peek at reactive values without creating a dependency on them
-
-`observeEvent` - code that executes when, eg, a button is pressed
-
-`eventReactive` - a reactive value that is only updated when, eg, a button is pressed
 
 
 # Pushing back inputs
@@ -139,7 +282,7 @@ One reason you might want to break pure reactivity is to provide a quick way to 
 
 
 
-# Genome browser challenge, part 2 {.challenge}
+## Genome browser challenge, part 2 {.challenge}
 
 Add buttons to your genome browser to navigate left and right, and/or zoom in and out.
 
@@ -149,7 +292,7 @@ Add buttons to your genome browser to navigate left and right, and/or zoom in an
 
 
 
-# Module challenge {.challenge}
+## Module challenge {.challenge}
 
 Adapt your genome browser to be a module.
 

@@ -23,7 +23,6 @@ biocLite(c(
 # Hello, world
 # ============
 
-
 library(shiny)
 
 ui1 <- fluidPage("Hello, world.")
@@ -31,7 +30,6 @@ ui1 <- fluidPage("Hello, world.")
 server1 <- function(input, output, session) { }
 
 app1 <- shinyApp(ui1, server1)
-
 app1
 
 
@@ -57,9 +55,9 @@ app1
 # DataTable
 # =========
 
-# ================
-# Upload challenge
-# ================
+## ----------------
+## Upload challenge
+## ----------------
 # 
 # 
 # 
@@ -72,9 +70,9 @@ app1
 # What you can't see doesn't need to be computed
 # ==============================================
 
-# ==================
-# Reactive challenge
-# ==================
+## ------------------
+## Reactive challenge
+## ------------------
 # 
 # Use what you have just learned to make this app more responsive.
 # 
@@ -82,9 +80,9 @@ app1
 # 
 # 
 #
-# ================================
-# Genome browser challenge, part 1
-# ================================
+## --------------------------------
+## Genome browser challenge, part 1
+## --------------------------------
 # 
 # The following code produces a diagram for a region of a genome. Your
 # collaborator is asking you to make diagrams for a whole lot of
@@ -102,7 +100,6 @@ library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
 location <- as("chrI:140000-160000", "GRanges")
 
 # You don't need to understand the rest of this code, just wrap it in Shiny.
-
 genome <- BSgenome.Scerevisiae.UCSC.sacCer3
 txdb <- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
 
@@ -124,17 +121,17 @@ plotTracks(
 # 
 # 
 #
-# ==============================
-# Escaping from reactive systems
-# ==============================
+# =================================
+# Escaping from the reactive system
+# =================================
 
 # ===================
 # Pushing back inputs
 # ===================
 
-# ================================
-# Genome browser challenge, part 2
-# ================================
+## --------------------------------
+## Genome browser challenge, part 2
+## --------------------------------
 # 
 # Add buttons to your genome browser to navigate left and right, and/or
 # zoom in and out.
@@ -146,9 +143,9 @@ plotTracks(
 # Modules
 # =======
 
-# ================
-# Module challenge
-# ================
+## ----------------
+## Module challenge
+## ----------------
 # 
 # Adapt your genome browser to be a module.
 # 

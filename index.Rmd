@@ -1,7 +1,22 @@
 ---
-title: "Shiny Tutorial"
-author: "Paul Harrison"
-date: "28 September 2016"
+title: "Shiny tutorial"
+date: "October 2016"
 output: html_document
 ---
 
+# Files
+
+* [tutorial.R](tutorial.R) 
+* [forward.bw](forward.bw) 
+* [reverse.bw](reverse.bw) 
+
+Download these files. `tutorial.R` contains all the code in the "tutorial" link below. Open `tutorial.R` in RStudio and step through it.
+
+# Content
+
+* [Tutorial](tutorial.html) ([.Rmd](tutorial.Rmd))
+* [Slides](slides.html) ([.Rmd](slides.Rmd))
+
+## Source code
+
+* [GitHub repository](https://github.com/MonashBioinformaticsPlatform/2016-11-03-r-shiny)
