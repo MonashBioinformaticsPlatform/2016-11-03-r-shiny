@@ -5,16 +5,17 @@ date: "October 2016"
 output:
     html_document:
         toc: true
-        toc_depth: 2
+        toc_depth: 3
         theme: cerulean
         css: style.css
 runtime: shiny
 ---
 
-# Setup
+## Setup
 
 ```{r eval=FALSE}
 install.packages("shiny")
+install.packages("DT")
 
 source("https://bioconductor.org/biocLite.R")
 biocLite(c(
@@ -23,57 +24,98 @@ biocLite(c(
     "GenomicRanges",
     "rtracklayer",
     "Gviz"))
-
-
 ```
 
 Please make sure you are running R 3.3 and Bioconductor 3.3 or higher. Bioconductor 3.3 in particular is vastly more stable than 3.2.
 
-# Hello, world
+## Hello, world
 
 ```{r message=FALSE}
 library(shiny)
 
-ui1 <- fluidPage(titlePanel("Hello world"))
+ui_hello <- fluidPage(titlePanel("Hello world"))
 
-server1 <- function(input, output, session) { }
+server_hello <- function(input, output, session) { }
 
-app1 <- shinyApp(ui1, server1)
-app1
+app_hello <- shinyApp(ui_hello, server_hello)
+app_hello
 ```
 
 Let's explore what we've just created to understand better what is going on.
 
 ```{r}
-class(ui1)
-as.character(ui1)
+class(ui_hello)
+as.character(ui_hello)
 
-class(app1)
+class(app_hello)
 ```
 
 ```{r eval=FALSE}
 # Various ways of running an app
-runApp(app1)
-runGadget(app1)
-runGadget(app1, viewer=dialogViewer("App 1"))
-print(app1)
-app1
+runApp(app_hello)
+runGadget(app_hello)
+runGadget(app_hello, viewer=dialogViewer("App 1"))
+print(app_hello)
+app_hello
 ```
 
 Our application `app` can be run using `runApp` or `runGadget`. Oddly, but following the lead of `ggplot2`, it can also be run by printing it out.
 
 
-# input and output
+## input and output
+
+The UI component of an app will normally define various inputs and outputs. The job of the server is then to take those inputs and render outputs.
+
+The server runs in R. It opens a port and waits for a web browser client to contact it. Its first job will be to convert the UI to HTML and sent it to the web browser, along with some Javascript that reads the inputs and sends them back to the server as they change, and displays outputs that the server sends back to the client. It then calls your server function, which defines how to compute outputs from inputs. As the user updates inputs, the web browser sends these changes back to the server, and the server recomputes outputs as necessary.
+
+In the example below, there are three inputs, `modulo`, `step`, and `title`, accessed using the `input` argument, and one output, `plotout`. A way to "render" `plotout` is stored into the `output` argument. (Unusually for R, `output` can be mutated.)
+
+```{r}
+ui_modulo <- fluidPage(
+    titlePanel("Counting modulo app"),
+    sliderInput("modulo", "Modulo", 1, 20, 10),
+    sliderInput("step", "Step", 1, 20, 3),
+    textInput("title", "Plot title", "A plot"),
+    plotOutput("plotout"))
+
+server_modulo <- function(input, output, session) {
+    output$plotout <- renderPlot({
+        plot((seq_len(100)*input$step) %% input$modulo, main=input$title)
+    })
+}
+
+shinyApp(ui_modulo, server_modulo)
+```
 
 
-# DataTable
+## Shiny apps and Shiny Server
+
+A Shiny app consists of a directory containing a file called "app.R". The last statement in "app.R" should be a call to `shinyApp( )`.
+
+(An older style of writing apps separates this into two files, "ui.R" and "server.R".)
+
+Within R, an app directory can be run with `runApp("directoryname")`.
+
+Shiny app directories can also be served with a webserver daemon called Shiny Server, which currently only runs on Linux. This is similar to webservers such as Apache or Nginx, but also serves Shiny apps and Rmarkdown documents with Shiny components.
+
+https://www.rstudio.com/products/shiny/download-server/
 
 
-## Upload challenge {.challenge}
+### App directory upload challenge {.challenge}
+
+Convert one of the apps above to a Shiny app directory, or write your own app. Name the directory using your own name, as we are going to upload it to a server.
+
+Run your app with 
+
+```{r eval=FALSE}
+runApp("yourdirectoryname")
+```
+
+Upload your app to our server with `scp`. Your instructor will give you details for how to do this.
 
 
 
-# Reactive expressions save recomputation
+## Reactive expressions save recomputation
 
 We've seen pieces of code wrapped in functions such as `renderPlot( )`. This is called a "reactive context", and is a common pattern in Shiny. Reactive contexts contain code that might need to be re-run if their inputs change.
 
@@ -145,7 +187,7 @@ Try adjusting one or other of the inputs and observe what is printed to the cons
 ( Errors, eg calling `stop( )`, are not considered side effects and are fine in reactive expressions. Errors are cached just like values, and will be correctly thrown to the reactive context attempting to get the value of the reactive expression each time. )
 
 
-## Ronald and Muriel's tea argument {.challenge}
+### Tea challenge {.challenge}
 
 Muriel and Ronald are having an argument about tea. Muriel claims to be able to tell if tea or milk is poured into a cup first. An experiment is devised to test Muriel's claim. Eight cups of tea are made, four with tea first and four with milk first, and Muriel's accuracy is tested. She classifies all eight cups correctly. The results seem to confirm Muriel's claim, but Ronald wants to know how likely a result like this would have been if Muriel's supposed ability was simply luck.
 
@@ -174,7 +216,7 @@ If Muriel was correct all eight times then Ronald can reasonably abandon the ide
 
 We'd like to explore how this test works with different inputs, but avoid unnecessary computation, especially calls to `permutations`. Even with eight cups there were quite a lot of permutations to consider. (It's possible to write much more efficient code than the above. In R you would normally use `fisher.test(x,y,alternative="greater")`. However, for the sake of a slightly silly exercise we will use the above.) 
 
-### Ronald's test as a Shiny app
+#### Ronald's test as a Shiny app
 
 ```{r}
 ui_tea <- fluidPage(
@@ -204,14 +246,14 @@ server_tea <- function(input, output, server) {
 shinyApp(ui_tea, server_tea)
 ```
 
-### Challenge
+#### Challenge
 
 Use what you have just learned to make this app more responsive.
 
 The slow part is the call to the `permutations` function. We would like to avoid re-running this unnecessarily.
 
 
-# tabsetPanel: what you can't see doesn't need to be computed
+## tabsetPanel: what you can't see doesn't need to be computed
 
 It is possible to divide your up app up into a set of tabs. One very useful thing about this is that outputs on a tab that aren't currently visible aren't immediately recomputed.
 
@@ -237,7 +279,9 @@ Shiny offers three layouts for this with similar functionality: `tabsetPanel`, `
 There is an older style of user interface in which computations are delayed until a button is pressed. It is possible to do this with Shiny, using `actionButton`, and `observeEvent` to set some `reactiveValues` as a sort of secondary `input`. Also relevant, the `isolate` function lets you look at a reactive value without creating a dependency on it. However, when you must fight against a library this hard it is a hint not to solve the problem this way. Another argument against this approach is that it is now possible to be showing results inconsistent with the inputs. The Shiny deal is that if you conform to the reactive paradigm, Shiny will handle all the difficult work of maintaining a consistent state.
 
 
-## Genome browser challenge, part 1 {.challenge}
+## Genome browser
+
+### Genome browser challenge, part 1 {.challenge}
 
 The following code produces a diagram for a region of a genome. Your collaborator is asking you to make diagrams for a whole lot of different locations in the genome. Create a Shiny app to create these diagrams for them.
 
@@ -276,37 +320,151 @@ plotTracks(
 ```
 
 
-# Pushing back inputs
+## Pushing back inputs
 
 One reason you might want to break pure reactivity is to provide a quick way to fill in an input.
 
 
 
-## Genome browser challenge, part 2 {.challenge}
+### Genome browser challenge, part 2 {.challenge}
 
 Add buttons to your genome browser to navigate left and right, and/or zoom in and out.
 
 
 
-# Modules
+## Modules
+
+Shiny modules are reusable parts of a Shiny app. The main issue here is avoiding collisions in the `input` and `output` namespaces.
+
+A Shiny module consists of a function create the UI and function to be called with `callModule` in the server function.
+
+The UI should prefix all the input and output IDs using `NS( )`.
+
+```{r}
+ns <- NS("somenamespace")
+ns("foo")
+ns("bar")
+```
+
+Here is an example of everything in action:
+
+```{r}
+# Define a trivial module
+
+# In the UI, we use NS( ) to prefix all of the ids
+mymodule_ui <- function(id) {
+    ns <- NS(id)
+    
+    div(
+        numericInput(ns("number"), "Number", 5),
+        textOutput(ns("result")))
+}
+
+# callModule( ) will magically prefix ids for us in the server function
+mymodule_server <- function(input, output, session, multiply_by) {
+    output$result <- renderText({
+        paste0(input$number, " times ", multiply_by, " is ", input$number * multiply_by) 
+    })
+}
 
 
+# Use the module in an app
 
-## Module challenge {.challenge}
+ui_mult <- fluidPage(
+    titlePanel("Demonstration of modules"),
+    h2("Instance 1"),
+    mymodule_ui("mod1"),
+    h2("Instance 2"),
+    mymodule_ui("mod2"))
+
+server_mult <- function(input, output, session) {
+    callModule(mymodule_server, "mod1", multiply_by=3)
+    callModule(mymodule_server, "mod2", multiply_by=7)
+    
+    #Debugging
+    observe( print(reactiveValuesToList(input)) )
+}
+
+shinyApp(ui_mult, server_mult)
+```
+
+### Best practice?
+
+Without care, Shiny might create a nightmare scenario:
+
+* Analyses that can be only performed via a UI.
+* Apps that can't be used as a part of larger apps.
+* Complex parameter settings that aren't recorded in either a URL or using R code.
+
+Ideally the language and library would nudge us away from such a scenario. Shiny seems to be shoving us toward it, by making good practices hard work. To write re-usable code you may need to provide:
+
+* The two functions needed to define a module.
+* A function to create a `shinyApp( )`, for interactive use.
+* R functions that do the actual computation of your app.
+
+Also worth considering:
+
+* A Shiny app can return a value with `stopApp( )`. If the app lets you select points or brush regions, it could return what these were, to make it easy to switch back to working with R on the console.
+* A Shiny module's server function can return a value, which could be a list containing reactive expressions.
+
+Care also needs to be taken when Shiny apps form a part of published results:
+
+* When delivering a Shiny app, doing so somewhere that R won't accidentally be upgraded under it (possibly breaking it or changing the results it reports).
+
+
+### Genome browser challenge, part 3 {.challenge}
 
 Adapt your genome browser to be a module.
 
-There is a list of genes of particular interest. Make an app that shows a table of these genes. Use your genome browser module to display a selected gene.
+
+## DataTables
+
+DataTables is a very flexible Javascript library for displaying tables, which can be used from Shiny.
+
+DataTables has built-in pagination and search. Only the current page or search results need to be sent to the client, so a DataTable can display a very large data frame without having to send the whole thing over the network.
+
+DataTables allows rows to be selected, so it can serve as way to select from a large number of items.
+
+Shiny has an version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use `::` to specify the one we want.
+
+```
+gene_df <- data.frame(
+    gene=names(genes(txdb)), 
+    location=as.character(genes(txdb)), 
+    row.names=NULL, stringsAsFactors=FALSE)
+
+ui_table <- fluidPage(
+    titlePanel("Gene table"),
+    DT::dataTableOutput("genes"))
+
+server_table <- function(input,output,session) {
+    output$genes <- DT::renderDataTable(
+            server = TRUE,
+            selection = "single",
+            options = list(pageLength=10), {
+        gene_df
+    })
+    
+    observeEvent(input$genes_rows_selected, {
+        cat("Selected:\n")
+        print(input$genes_rows_selected)
+        print(gene_df[ input$genes_rows_selected, ])
+        # Wouldn't it be nice if something happened in response to this?
+    })
+    
+    # Debugging:
+    # observe(print(reactiveValuesToList(input)))
+}
+
+shinyApp(ui_table, server_table)
+```
+
+It's interesting that a DataTable can act as both an output and an input. Similarly a `plotOutput` can accept input such as clicking and dragging a rectangle ("brushing"). UI elements like this allow a "brushing and linking" style of interface with multiple views of a data set, and the user directly interacting with the displayed data. This may seems like a circular concept, but in our server function we may regard the inputs and outputs of a UI element as separate things, and we still only need to calculate output based on input, so there is no problem.
 
 
+### Genome browser challenge, part 4 {.challenge}
 
-...solutions...
-
-
-
-
-
-
+Add your genome browser module to the above DataTables app. When a row is selected, the genome browser should go to the appropriate location.
 
 
 
