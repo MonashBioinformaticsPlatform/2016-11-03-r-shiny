@@ -1,6 +1,8 @@
 # Cached results rendering tutorial
 tutorial_files/
 
+deploy.sh
+
 # History files
 .Rhistory
 .Rapp.history

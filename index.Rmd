@@ -1,8 +1,34 @@
 ---
 title: "Shiny tutorial"
 date: "October 2016"
-output: html_document
+output:
+    html_document:
+        theme: cerulean
+        css: style.css
 ---
+
+<div style="float: right; width: 33%; margin: 1em; padding: 1em; border: solid 1px #000; background: #fff8ee;">
+<h2 style="margin-top: 0">Links</h2>
+
+### Shiny
+
+[Shiny](http://shiny.rstudio.com/)
+
+ * [gallery](http://shiny.rstudio.com/gallery/)
+ * [reference](http://shiny.rstudio.com/reference/shiny/latest/)
+
+[Shiny Server](https://www.rstudio.com/products/shiny/download-server/)
+
+[DT](https://rstudio.github.io/DT/) (DataTables in R)
+
+### Bioconductor
+
+[Bioconductor cheat sheet](https://github.com/mikelove/bioc-refcard)
+
+[Gviz](https://bioconductor.org/packages/release/bioc/html/Gviz.html) (and see also [ggBio](https://bioconductor.org/packages/release/bioc/html/ggbio.html))
+</div>
+
+This is a tutorial prepared by the [Monash Bioinformatics Platform](http://bioinformatics.erc.monash.edu/) on the Shiny library developed by RStudio, to be presented as part of a [hands on workshop at ABACBS 2016](http://www.abacbs.org/biocasia2016workshop/). Shiny provides an easy way to present R data analysis interactively and over the web.
 
 ## Files
 
@@ -14,26 +40,8 @@ Download these files. `tutorial.R` contains all the code in the "tutorial" link 
 
 ## Content
 
-* [Tutorial](tutorial.html) ([.Rmd](tutorial.Rmd))
-* [Slides](slides.html) ([.Rmd](slides.Rmd))
-
-## Links
-
-### Shiny
-
-* [Shiny](http://shiny.rstudio.com/)
-    * [Gallery](http://shiny.rstudio.com/gallery/)
-    * [Reference](http://shiny.rstudio.com/reference/shiny/latest/)
-
-* [Shiny Server](https://www.rstudio.com/products/shiny/download-server/)
-
-* [DT](https://rstudio.github.io/DT/) (DataTables in R)
-
-### Bioconductor
-
-* [Bioconductor cheat sheet](https://github.com/mikelove/bioc-refcard)
-
-* [Gviz](https://bioconductor.org/packages/release/bioc/html/Gviz.html) (and see also [ggBio](https://bioconductor.org/packages/release/bioc/html/ggbio.html))
+* [Tutorial](biotraining.erc.monash.edu:3838/chaos/tutorial) ([static](tutorial.html)) ([.Rmd](tutorial.Rmd))
+* [Slides](biotraining.erc.monash.edu:3838/chaos/slides) ([static](slides.html)) ([.Rmd](slides.Rmd))
 
 ## Source code
 
