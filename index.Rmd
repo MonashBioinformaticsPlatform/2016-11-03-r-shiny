@@ -40,8 +40,8 @@ Download these files. `tutorial.R` contains all the code in the "tutorial" link 
 
 ## Content
 
-* [Tutorial](biotraining.erc.monash.edu:3838/chaos/tutorial) ([static](tutorial.html)) ([.Rmd](tutorial.Rmd))
-* [Slides](biotraining.erc.monash.edu:3838/chaos/slides) ([static](slides.html)) ([.Rmd](slides.Rmd))
+* [Tutorial](http://biotraining.erc.monash.edu:3838/chaos/tutorial) ([static](tutorial.html)) ([.Rmd](tutorial.Rmd))
+* [Slides](http://biotraining.erc.monash.edu:3838/chaos/slides) ([static](slides.html)) ([.Rmd](slides.Rmd))
 
 ## Source code
 
