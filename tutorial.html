@@ -510,7 +510,7 @@ shinyApp(ui_mult, server_mult)</code></pre>
 <p>Also worth considering:</p>
 <ul>
 <li>A Shiny app can return a value with <code>stopApp( )</code>. If the app lets you select points or brush regions, it could return what these were, to make it easy to switch back to working with R on the console.</li>
-<li>A Shiny module’s server function can return a value, which could be a list containing reactive expressions.</li>
+<li>A Shiny module’s server function can return a value, which could be a list containing reactive expressions so that it can act as a data source as well as a sink.</li>
 </ul>
 <p>Care also needs to be taken when Shiny apps form a part of published results:</p>
 <ul>

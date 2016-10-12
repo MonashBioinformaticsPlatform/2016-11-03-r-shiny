@@ -434,7 +434,7 @@ Ideally the language and library would nudge us away from such a scenario. Shiny
 Also worth considering:
 
 * A Shiny app can return a value with `stopApp( )`. If the app lets you select points or brush regions, it could return what these were, to make it easy to switch back to working with R on the console.
-* A Shiny module's server function can return a value, which could be a list containing reactive expressions.
+* A Shiny module's server function can return a value, which could be a list containing reactive expressions so that it can act as a data source as well as a sink.
 
 Care also needs to be taken when Shiny apps form a part of published results:
 
