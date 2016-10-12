@@ -63,7 +63,7 @@ Yes. Yes. This is a fertile land and we will thrive. We will rule over all this 
 </div>
 
 
-### Best practice, what best practice?
+## Best practice, what best practice?
 
 Without care, Shiny might create a nightmare scenario:
 
