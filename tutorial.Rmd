@@ -1,5 +1,5 @@
 ---
-title: "Shiny Tutorial"
+title: "Shiny tutorial"
 author: 
   - name: "Paul Harrison @paulfharrison"
     affiliation: "Monash Bioinformatics Platform"

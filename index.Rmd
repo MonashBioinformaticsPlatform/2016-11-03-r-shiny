@@ -1,5 +1,5 @@
 ---
-title: "Shiny tutorial"
+title: "Shiny course"
 date: "October 2016"
 output:
     html_document:
