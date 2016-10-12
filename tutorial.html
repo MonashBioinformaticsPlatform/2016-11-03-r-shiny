@@ -9,7 +9,6 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Paul Harrison" />
 
 
 <title>Shiny Tutorial</title>
@@ -117,8 +116,9 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Shiny Tutorial</h1>
-<h4 class="author"><em>Paul Harrison</em></h4>
-<h4 class="date"><em>October 2016</em></h4>
+<h4 class="author"><em>Paul Harrison <span class="citation">@paulfharrison</span></em></h4>
+<address class="author_afil">
+Monash Bioinformatics Platform<br><h4 class="date"><em>October 2016</em></h4>
 
 </div>
 
@@ -147,6 +147,7 @@ $(document).ready(function () {
 <li><a href="#datatables">DataTables</a><ul>
 <li><a href="#genome-browser-challenge-part-4">Genome browser challenge, part 4</a></li>
 </ul></li>
+<li><a href="#shiny-in-rmarkdown">Shiny in Rmarkdown</a></li>
 </ul>
 </div>
 
@@ -208,8 +209,8 @@ server_modulo &lt;- function(input, output, session) {
     })
 }
 
-shinyApp(ui_modulo, server_modulo)</code></pre>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+shinyApp(ui_modulo, server_modulo, options=list(height=800))</code></pre>
+<div style="width: 100% ; height: 800px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
 </div>
 <div id="shiny-apps-and-shiny-server" class="section level2">
 <h2>Shiny apps and Shiny Server</h2>
@@ -220,10 +221,15 @@ shinyApp(ui_modulo, server_modulo)</code></pre>
 <p><a href="https://www.rstudio.com/products/shiny/download-server/" class="uri">https://www.rstudio.com/products/shiny/download-server/</a></p>
 <div id="app-directory-upload-challenge" class="section level3 challenge">
 <h3>App directory upload challenge</h3>
-<p>Convert one of the apps above to a Shiny app directory, or write your own app. Name the directory using your own name, as we are going to upload it to a server.</p>
-<p>Run your app with</p>
+<ol style="list-style-type: decimal">
+<li><p>Create a directory for an app. Name the directory in a way that will be unique, such as with your own name or a secret identity, as we are going to upload it to a server.</p></li>
+<li><p>Save the code from one of the apps above to “app.R” in your directory. Modify the code to do something different if you like.</p></li>
+<li><p>Run your app with:</p></li>
+</ol>
 <pre class="r"><code>runApp(&quot;yourdirectoryname&quot;)</code></pre>
-<p>Upload your app to our server with <code>scp</code>. Your instructor will give you details for how to do this.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Upload your app to our server with <code>scp</code>. Your instructor will give you details for how to do this.</li>
+</ol>
 </div>
 </div>
 <div id="reactive-expressions-save-recomputation" class="section level2">
@@ -281,7 +287,7 @@ server_pythagorus &lt;- function(input, output, server) {
 
 shinyApp(ui_pythagorus, server_pythagorus)</code></pre>
 <div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
-<p>Try adjusting one or other of the inputs and observe what is printed to the console.</p>
+<p>Run this code in R, try adjusting one or other of the inputs and observe what is printed to the console.</p>
 <p><code>cat</code> has a side effect, printing to the console, which lets us peek at what is going on under the hood here. Except when debugging you should avoid side effects within reactive expressions. Examples of side effects are printing, plotting, or altering global variables with <code>&lt;&lt;-</code>. Side effects break the reactive abstraction. For example a <code>renderPlot( )</code> should not rely on a <code>reactive( )</code> to perform the actual plotting.</p>
 <p>( Errors, eg calling <code>stop( )</code>, are not considered side effects and are fine in reactive expressions. Errors are cached just like values, and will be correctly thrown to the reactive context attempting to get the value of the reactive expression each time. )</p>
 <div id="tea-challenge" class="section level3 challenge">
@@ -291,10 +297,10 @@ shinyApp(ui_pythagorus, server_pythagorus)</code></pre>
     do.call(cbind, lapply(seq_along(items), 
         function(i) rbind(items[i], permutations(items[-i]))))
 
-tea &lt;- 4
-tea_correct &lt;- 4
-milk &lt;- 4
-milk_correct &lt;- 4
+tea &lt;- 3
+tea_correct &lt;- 3
+milk &lt;- 2
+milk_correct &lt;- 2
 
 x &lt;- c(rep(0,tea), rep(1,milk))
 y &lt;- c(rep(0,tea_correct), rep(1,tea-tea_correct), 
@@ -305,8 +311,7 @@ distribution &lt;- colSums(x_perms == y)
 p &lt;- mean(distribution &gt;= statistic)
 
 p</code></pre>
-<pre><code>## [1] 0.01428571</code></pre>
-<p>If Muriel was correct all eight times then Ronald can reasonably abandon the idea that Muriel’s ability is due to chance.</p>
+<pre><code>## [1] 0.1</code></pre>
 <p>We’d like to explore how this test works with different inputs, but avoid unnecessary computation, especially calls to <code>permutations</code>. Even with eight cups there were quite a lot of permutations to consider. (It’s possible to write much more efficient code than the above. In R you would normally use <code>fisher.test(x,y,alternative=&quot;greater&quot;)</code>. However, for the sake of a slightly silly exercise we will use the above.)</p>
 <div id="ronalds-test-as-a-shiny-app" class="section level4">
 <h4>Ronald’s test as a Shiny app</h4>
@@ -317,6 +322,10 @@ p</code></pre>
     numericInput(&quot;tea_correct&quot;, &quot;Tea first correctly called&quot;, 2),
     numericInput(&quot;milk_correct&quot;, &quot;Milk first correctly called&quot;, 2),
     textOutput(&quot;p_text&quot;))
+
+permutations &lt;- function(items)
+    do.call(cbind, lapply(seq_along(items), 
+        function(i) rbind(items[i], permutations(items[-i]))))
 
 server_tea &lt;- function(input, output, server) {
     output$p_text &lt;- renderText( withProgress(message=&quot;Computing p&quot;, {
@@ -339,8 +348,10 @@ shinyApp(ui_tea, server_tea)</code></pre>
 </div>
 <div id="challenge" class="section level4">
 <h4>Challenge</h4>
-<p>Use what you have just learned to make this app more responsive.</p>
-<p>The slow part is the call to the <code>permutations</code> function. We would like to avoid re-running this unnecessarily.</p>
+<ol style="list-style-type: decimal">
+<li><p>Use what you have just learned to make this app more responsive. The slow part is the call to the <code>permutations</code> function. We would like to avoid re-running this unnecessarily.</p></li>
+<li><p>In the story, there were four cups of tea first and four cups of milk first, and Muriel was correct all eight times. Can Ronald reasonably reject the idea that Muriel’s ability is due to chance?</p></li>
+</ol>
 </div>
 </div>
 </div>
@@ -360,10 +371,10 @@ shinyApp(ui_tea, server_tea)</code></pre>
             br(),
             textOutput(&quot;p_text&quot;))))
 
-shinyApp(ui_tea_tabset, server_tea)</code></pre>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+shinyApp(ui_tea_tabset, server_tea, options=list(height=500))</code></pre>
+<div style="width: 100% ; height: 500px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
 <p>Shiny offers three layouts for this with similar functionality: <code>tabsetPanel</code>, <code>navlistPanel</code>, and <code>navbarPage</code>.</p>
-<p>There is an older style of user interface in which computations are delayed until a button is pressed. It is possible to do this with Shiny, using <code>actionButton</code>, and <code>observeEvent</code> to set some <code>reactiveValues</code> as a sort of secondary <code>input</code>. Also relevant, the <code>isolate</code> function lets you look at a reactive value without creating a dependency on it. However, when you must fight against a library this hard it is a hint not to solve the problem this way. Another argument against this approach is that it is now possible to be showing results inconsistent with the inputs. The Shiny deal is that if you conform to the reactive paradigm, Shiny will handle all the difficult work of maintaining a consistent state.</p>
+<p>There is an older style of user interface in which computations are delayed until a button is pressed. It is possible to do this with Shiny, using <code>actionButton</code>, and <code>observeEvent</code> to set some <code>reactiveValues</code> as a sort of secondary <code>input</code>. Also relevant, the <code>isolate</code> function lets you look at a reactive value without creating a dependency on it. However when you must fight against a library this hard it is a hint not to solve the problem this way.</p>
 </div>
 <div id="genome-browser" class="section level2">
 <h2>Genome browser</h2>
@@ -487,7 +498,19 @@ shinyApp(ui_mult, server_mult)</code></pre>
 </div>
 <div id="genome-browser-challenge-part-3" class="section level3 challenge">
 <h3>Genome browser challenge, part 3</h3>
-<p>Adapt your genome browser to be a module.</p>
+<p>Adapt your genome browser to be a Shiny module. It should be usable with the following code:</p>
+<pre class="r"><code># Load your module code
+source(&quot;browser.R&quot;)
+
+ui_browsermod &lt;- fluidPage( 
+    titlePanel(&quot;Using a genome browser module&quot;),
+    browser_ui(&quot;browser&quot;))
+
+server_browsermod &lt;- function(input,output,session) {
+    callModule(browser_server, &quot;browser&quot;)
+}
+
+shinyApp(ui_browsermod, server_browsermod)</code></pre>
 </div>
 </div>
 <div id="datatables" class="section level2">
@@ -496,7 +519,7 @@ shinyApp(ui_mult, server_mult)</code></pre>
 <p>DataTables has built-in pagination and search. Only the current page or search results need to be sent to the client, so a DataTable can display a very large data frame without having to send the whole thing over the network.</p>
 <p>DataTables allows rows to be selected, so it can serve as way to select from a large number of items.</p>
 <p>Shiny has an version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use <code>::</code> to specify the one we want.</p>
-<pre><code>gene_df &lt;- data.frame(
+<pre class="r"><code>gene_df &lt;- data.frame(
     gene=names(genes(txdb)), 
     location=as.character(genes(txdb)), 
     row.names=NULL, stringsAsFactors=FALSE)
@@ -524,12 +547,38 @@ server_table &lt;- function(input,output,session) {
     # observe(print(reactiveValuesToList(input)))
 }
 
-shinyApp(ui_table, server_table)</code></pre>
+shinyApp(ui_table, server_table, options=list(height=600))</code></pre>
+<div style="width: 100% ; height: 600px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
 <p>It’s interesting that a DataTable can act as both an output and an input. Similarly a <code>plotOutput</code> can accept input such as clicking and dragging a rectangle (“brushing”). UI elements like this allow a “brushing and linking” style of interface with multiple views of a data set, and the user directly interacting with the displayed data. This may seems like a circular concept, but in our server function we may regard the inputs and outputs of a UI element as separate things, and we still only need to calculate output based on input, so there is no problem.</p>
 <div id="genome-browser-challenge-part-4" class="section level3 challenge">
 <h3>Genome browser challenge, part 4</h3>
 <p>Add your genome browser module to the above DataTables app. When a row is selected, the genome browser should go to the appropriate location.</p>
 </div>
+</div>
+<div id="shiny-in-rmarkdown" class="section level2">
+<h2>Shiny in Rmarkdown</h2>
+<p>Shiny can also be used in Rmarkdown. This document is an example.</p>
+<p>The YAML header should look something like:</p>
+<pre><code>---
+title: &quot;A title&quot;
+output: html_document
+runtime: shiny
+---</code></pre>
+<p>Shiny UI and server code can then be placed in R code blocks. <code>input</code>, <code>output</code>, and <code>session</code> are available as in server functions. You only need UI for inputs, as <code>renderXXX</code> functions magically create their corresponding <code>xxxOutput</code>.</p>
+<pre><code>```{r echo=FALSE}
+sliderInput(&quot;amount&quot;, &quot;Amount&quot;, 0, 10, 5)
+renderText({ paste0(&quot;Amount is &quot;, input$amount) })
+```
+</code></pre>
+<p><br><br></p>
+<p>Modules also work:</p>
+<pre><code>```{r echo=FALSE}
+mymodule_ui(&quot;mod3&quot;)
+callModule(mymodule_server, &quot;mod3&quot;, multiply_by=9)
+```
+</code></pre>
+<p><br><br></p>
+<p>Shiny app objects and app directories can also be shown, as has been done throughout this document, but they are enclosed in an &lt;iframe&gt;, so the size is fixed. The size can be specified with <code>shinyApp(..., options=list(width=..., height=...))</code>.</p>
 </div>
 
 

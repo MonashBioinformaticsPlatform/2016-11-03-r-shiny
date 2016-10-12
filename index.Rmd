@@ -4,7 +4,7 @@ date: "October 2016"
 output: html_document
 ---
 
-# Files
+## Files
 
 * [tutorial.R](tutorial.R) 
 * [forward.bw](forward.bw) 
@@ -12,10 +12,28 @@ output: html_document
 
 Download these files. `tutorial.R` contains all the code in the "tutorial" link below. Open `tutorial.R` in RStudio and step through it.
 
-# Content
+## Content
 
 * [Tutorial](tutorial.html) ([.Rmd](tutorial.Rmd))
 * [Slides](slides.html) ([.Rmd](slides.Rmd))
+
+## Links
+
+### Shiny
+
+* [Shiny](http://shiny.rstudio.com/)
+    * [Gallery](http://shiny.rstudio.com/gallery/)
+    * [Reference](http://shiny.rstudio.com/reference/shiny/latest/)
+
+* [Shiny Server](https://www.rstudio.com/products/shiny/download-server/)
+
+* [DT](https://rstudio.github.io/DT/) (DataTables in R)
+
+### Bioconductor
+
+* [Bioconductor cheat sheet](https://github.com/mikelove/bioc-refcard)
+
+* [Gviz](https://bioconductor.org/packages/release/bioc/html/Gviz.html) (and see also [ggBio](https://bioconductor.org/packages/release/bioc/html/ggbio.html))
 
 ## Source code
 

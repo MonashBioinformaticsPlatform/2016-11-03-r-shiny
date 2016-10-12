@@ -1,6 +1,8 @@
 ---
 title: "Shiny Tutorial"
-author: "Paul Harrison"
+author: 
+  - name: "Paul Harrison @paulfharrison"
+    affiliation: "Monash Bioinformatics Platform"
 date: "October 2016"
 output:
     html_document:
@@ -84,7 +86,7 @@ server_modulo <- function(input, output, session) {
     })
 }
 
-shinyApp(ui_modulo, server_modulo)
+shinyApp(ui_modulo, server_modulo, options=list(height=800))
 ```
 
 
@@ -103,15 +105,17 @@ https://www.rstudio.com/products/shiny/download-server/
 
 ### App directory upload challenge {.challenge}
 
-Convert one of the apps above to a Shiny app directory, or write your own app. Name the directory using your own name, as we are going to upload it to a server.
+1. Create a directory for an app. Name the directory in a way that will be unique, such as with your own name or a secret identity, as we are going to upload it to a server.
 
-Run your app with 
+2. Save the code from one of the apps above to "app.R" in your directory. Modify the code to do something different if you like.
+
+3. Run your app with:
 
 ```{r eval=FALSE}
 runApp("yourdirectoryname")
 ```
 
-Upload your app to our server with `scp`. Your instructor will give you details for how to do this.
+4. Upload your app to our server with `scp`. Your instructor will give you details for how to do this.
 
 
 
@@ -180,7 +184,7 @@ server_pythagorus <- function(input, output, server) {
 shinyApp(ui_pythagorus, server_pythagorus)
 ```
 
-Try adjusting one or other of the inputs and observe what is printed to the console.
+Run this code in R, try adjusting one or other of the inputs and observe what is printed to the console.
 
 `cat` has a side effect, printing to the console, which lets us peek at what is going on under the hood here. Except when debugging you should avoid side effects within reactive expressions. Examples of side effects are printing, plotting, or altering global variables with `<<-`. Side effects break the reactive abstraction. For example a `renderPlot( )` should not rely on a `reactive( )` to perform the actual plotting.
 
@@ -196,10 +200,10 @@ permutations <- function(items)
     do.call(cbind, lapply(seq_along(items), 
         function(i) rbind(items[i], permutations(items[-i]))))
 
-tea <- 4
-tea_correct <- 4
-milk <- 4
-milk_correct <- 4
+tea <- 3
+tea_correct <- 3
+milk <- 2
+milk_correct <- 2
 
 x <- c(rep(0,tea), rep(1,milk))
 y <- c(rep(0,tea_correct), rep(1,tea-tea_correct), 
@@ -211,8 +215,6 @@ p <- mean(distribution >= statistic)
 
 p
 ```
-
-If Muriel was correct all eight times then Ronald can reasonably abandon the idea that Muriel's ability is due to chance.
 
 We'd like to explore how this test works with different inputs, but avoid unnecessary computation, especially calls to `permutations`. Even with eight cups there were quite a lot of permutations to consider. (It's possible to write much more efficient code than the above. In R you would normally use `fisher.test(x,y,alternative="greater")`. However, for the sake of a slightly silly exercise we will use the above.) 
 
@@ -226,6 +228,10 @@ ui_tea <- fluidPage(
     numericInput("tea_correct", "Tea first correctly called", 2),
     numericInput("milk_correct", "Milk first correctly called", 2),
     textOutput("p_text"))
+
+permutations <- function(items)
+    do.call(cbind, lapply(seq_along(items), 
+        function(i) rbind(items[i], permutations(items[-i]))))
 
 server_tea <- function(input, output, server) {
     output$p_text <- renderText( withProgress(message="Computing p", {
@@ -248,9 +254,9 @@ shinyApp(ui_tea, server_tea)
 
 #### Challenge
 
-Use what you have just learned to make this app more responsive.
+1. Use what you have just learned to make this app more responsive. The slow part is the call to the `permutations` function. We would like to avoid re-running this unnecessarily.
 
-The slow part is the call to the `permutations` function. We would like to avoid re-running this unnecessarily.
+2. In the story, there were four cups of tea first and four cups of milk first, and Muriel was correct all eight times. Can Ronald reasonably reject the idea that Muriel's ability is due to chance?
 
 
 ## tabsetPanel: what you can't see doesn't need to be computed
@@ -271,12 +277,12 @@ ui_tea_tabset <- fluidPage(
             br(),
             textOutput("p_text"))))
 
-shinyApp(ui_tea_tabset, server_tea)
+shinyApp(ui_tea_tabset, server_tea, options=list(height=500))
 ```
 
 Shiny offers three layouts for this with similar functionality: `tabsetPanel`, `navlistPanel`, and `navbarPage`.
 
-There is an older style of user interface in which computations are delayed until a button is pressed. It is possible to do this with Shiny, using `actionButton`, and `observeEvent` to set some `reactiveValues` as a sort of secondary `input`. Also relevant, the `isolate` function lets you look at a reactive value without creating a dependency on it. However, when you must fight against a library this hard it is a hint not to solve the problem this way. Another argument against this approach is that it is now possible to be showing results inconsistent with the inputs. The Shiny deal is that if you conform to the reactive paradigm, Shiny will handle all the difficult work of maintaining a consistent state.
+There is an older style of user interface in which computations are delayed until a button is pressed. It is possible to do this with Shiny, using `actionButton`, and `observeEvent` to set some `reactiveValues` as a sort of secondary `input`. Also relevant, the `isolate` function lets you look at a reactive value without creating a dependency on it. However when you must fight against a library this hard it is a hint not to solve the problem this way.
 
 
 ## Genome browser
@@ -414,7 +420,22 @@ Care also needs to be taken when Shiny apps form a part of published results:
 
 ### Genome browser challenge, part 3 {.challenge}
 
-Adapt your genome browser to be a module.
+Adapt your genome browser to be a Shiny module. It should be usable with the following code:
+
+```{r, eval=FALSE}
+# Load your module code
+source("browser.R")
+
+ui_browsermod <- fluidPage( 
+    titlePanel("Using a genome browser module"),
+    browser_ui("browser"))
+
+server_browsermod <- function(input,output,session) {
+    callModule(browser_server, "browser")
+}
+
+shinyApp(ui_browsermod, server_browsermod)
+```
 
 
 ## DataTables
@@ -427,7 +448,7 @@ DataTables allows rows to be selected, so it can serve as way to select from a l
 
 Shiny has an version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use `::` to specify the one we want.
 
-```
+```{r}
 gene_df <- data.frame(
     gene=names(genes(txdb)), 
     location=as.character(genes(txdb)), 
@@ -456,7 +477,7 @@ server_table <- function(input,output,session) {
     # observe(print(reactiveValuesToList(input)))
 }
 
-shinyApp(ui_table, server_table)
+shinyApp(ui_table, server_table, options=list(height=600))
 ```
 
 It's interesting that a DataTable can act as both an output and an input. Similarly a `plotOutput` can accept input such as clicking and dragging a rectangle ("brushing"). UI elements like this allow a "brushing and linking" style of interface with multiple views of a data set, and the user directly interacting with the displayed data. This may seems like a circular concept, but in our server function we may regard the inputs and outputs of a UI element as separate things, and we still only need to calculate output based on input, so there is no problem.
@@ -467,5 +488,54 @@ It's interesting that a DataTable can act as both an output and an input. Simila
 Add your genome browser module to the above DataTables app. When a row is selected, the genome browser should go to the appropriate location.
 
 
+## Shiny in Rmarkdown
 
+Shiny can also be used in Rmarkdown. This document is an example.
+
+The YAML header should look something like:
+
+```
+---
+title: "A title"
+output: html_document
+runtime: shiny
+---
+```
+
+Shiny UI and server code can then be placed in R code blocks. `input`, `output`, and `session` are available as in server functions. You only need UI for inputs, as `renderXXX` functions  magically create their corresponding `xxxOutput`.
+
+<pre><code>&#96;&#96;&#96;{r echo=FALSE}
+sliderInput("amount", "Amount", 0, 10, 5)
+renderText({ paste0("Amount is ", input$amount) })
+&#96;&#96;&#96;
+</code></pre>
+
+```{r echo=FALSE}
+if (exists("input"))
+    sliderInput("amount", "Amount", 0, 10, 5)
+if (exists("input"))
+    renderText({ paste0("Amount is ", input$amount) })
+```
+
+<br><br>
+
+Modules also work:
+
+<pre><code>&#96;&#96;&#96;{r echo=FALSE}
+mymodule_ui("mod3")
+callModule(mymodule_server, "mod3", multiply_by=9)
+&#96;&#96;&#96;
+</code></pre>
+
+```{r echo=FALSE}
+if (exists("input"))
+    mymodule_ui("mod3")
+if (exists("input"))
+    callModule(mymodule_server, "mod3", multiply_by=9)
+```
+
+
+<br><br>
+
+Shiny app objects and app directories can also be shown, as has been done throughout this document, but they are enclosed in an &lt;iframe&gt;, so the size is fixed. The size can be specified with `shinyApp(..., options=list(width=..., height=...))`.
 

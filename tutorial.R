@@ -63,7 +63,7 @@ server_modulo <- function(input, output, session) {
     })
 }
 
-shinyApp(ui_modulo, server_modulo)
+shinyApp(ui_modulo, server_modulo, options=list(height=800))
 
 
 ## ---------------------------
@@ -74,17 +74,20 @@ shinyApp(ui_modulo, server_modulo)
 ### App directory upload challenge
 ### ------------------------------
 # 
-# Convert one of the apps above to a Shiny app directory, or write your
-# own app. Name the directory using your own name, as we are going to
-# upload it to a server.
+# 1. Create a directory for an app. Name the directory in a way that
+# will be unique, such as with your own name or a secret identity, as we
+# are going to upload it to a server.
 # 
-# Run your app with
+# 2. Save the code from one of the apps above to "app.R" in your
+# directory. Modify the code to do something different if you like.
+# 
+# 3. Run your app with:
 # 
 
 runApp("yourdirectoryname")
 
 # 
-# Upload your app to our server with `scp`. Your instructor will give
+# 4. Upload your app to our server with `scp`. Your instructor will give
 # you details for how to do this.
 # 
 # 
@@ -163,10 +166,10 @@ permutations <- function(items)
     do.call(cbind, lapply(seq_along(items),
         function(i) rbind(items[i], permutations(items[-i]))))
 
-tea <- 4
-tea_correct <- 4
-milk <- 4
-milk_correct <- 4
+tea <- 3
+tea_correct <- 3
+milk <- 2
+milk_correct <- 2
 
 x <- c(rep(0,tea), rep(1,milk))
 y <- c(rep(0,tea_correct), rep(1,tea-tea_correct),
@@ -178,9 +181,6 @@ p <- mean(distribution >= statistic)
 
 p
 
-# 
-# If Muriel was correct all eight times then Ronald can reasonably
-# abandon the idea that Muriel's ability is due to chance.
 # 
 # We'd like to explore how this test works with different inputs, but
 # avoid unnecessary computation, especially calls to `permutations`.
@@ -202,6 +202,10 @@ ui_tea <- fluidPage(
     numericInput("tea_correct", "Tea first correctly called", 2),
     numericInput("milk_correct", "Milk first correctly called", 2),
     textOutput("p_text"))
+
+permutations <- function(items)
+    do.call(cbind, lapply(seq_along(items),
+        function(i) rbind(items[i], permutations(items[-i]))))
 
 server_tea <- function(input, output, server) {
     output$p_text <- renderText( withProgress(message="Computing p", {
@@ -243,7 +247,7 @@ ui_tea_tabset <- fluidPage(
             br(),
             textOutput("p_text"))))
 
-shinyApp(ui_tea_tabset, server_tea)
+shinyApp(ui_tea_tabset, server_tea, options=list(height=500))
 
 
 ## --------------
@@ -365,7 +369,23 @@ shinyApp(ui_mult, server_mult)
 ### Genome browser challenge, part 3
 ### --------------------------------
 # 
-# Adapt your genome browser to be a module.
+# Adapt your genome browser to be a Shiny module. It should be usable
+# with the following code:
+# 
+
+# Load your module code
+source("browser.R")
+
+ui_browsermod <- fluidPage(
+    titlePanel("Using a genome browser module"),
+    browser_ui("browser"))
+
+server_browsermod <- function(input,output,session) {
+    callModule(browser_server, "browser")
+}
+
+shinyApp(ui_browsermod, server_browsermod)
+
 # 
 # 
 #
@@ -401,7 +421,7 @@ server_table <- function(input,output,session) {
     # observe(print(reactiveValuesToList(input)))
 }
 
-shinyApp(ui_table, server_table)
+shinyApp(ui_table, server_table, options=list(height=600))
 
 
 ### --------------------------------
@@ -412,5 +432,26 @@ shinyApp(ui_table, server_table)
 # is selected, the genome browser should go to the appropriate location.
 # 
 # 
-# 
-# 
+#
+## ------------------
+## Shiny in Rmarkdown
+## ------------------
+
+---
+title: "A title"
+output: html_document
+runtime: shiny
+---
+
+
+if (exists("input"))
+    sliderInput("amount", "Amount", 0, 10, 5)
+if (exists("input"))
+    renderText({ paste0("Amount is ", input$amount) })
+
+
+if (exists("input"))
+    mymodule_ui("mod3")
+if (exists("input"))
+    callModule(mymodule_server, "mod3", multiply_by=9)
+

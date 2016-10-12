@@ -1,6 +1,7 @@
 ---
 title: "Shiny"
-author: "Paul Harrison"
+author: 
+  - name: "Paul Harrison @paulfharrison, Monash Bioinformatics Platform"
 date: "October 2016"
 output: 
   ioslides_presentation: 
@@ -40,39 +41,49 @@ Pure client can't work with large data, without heroic efforts (Dalliance).
 
 The `shiny` library makes it easy to build stateful servers. When a user interacts with an "app" it's like using a graphical application written in R.
 
-Other languages:
+Because the app is written in R, you have all your favourite libraries for analysis and plotting.
 
-Python: bokeh
+Shiny apps are written in a "reactive" style, which simplifies working out what needs to be updated when the user interacts with an app.
 
-Lighter options:
-
-`plotly` `htmlwidgets`
+("Reactive" covers a broad field. For example in Javascript, Facebook's React library is vastly different to Functional Reactive Programming offerings such as Bacon and ReactiveX. Shiny being server side, it doesn't attempt real-time reactivity such as animations, and is relatively simple.)
 
 
+## Shiny
 
-Shiny might not be your long-term solution, but it's probably your initial prototype.
+Shiny is developed by RStudio Inc, who so far look like good citizens in the R community.
 
-Shiny (and R in genral) is great for people with just a little computing experience.
+GPL3, code is on GitHub.
 
-Example: Your favourite heatmap clustering algorithm in only available in R.
+While some features integrate with RStudio, Shiny is a standalone library and does not require RStudio. It can be used with just a terminal, a web browser, and R.
 
+Shiny Server is a webserver that can serve Shiny apps and Shiny-enhanced Rmarkdown documents. Has an open source and a "pro" version. RStudio Inc also sells Shiny app hosting.
 
-
-## Functional style
-
-Reactive code should not have side-effects.
-
-Do not
-
-* modify globals with `<<-`
-
-* mutate data structures <br>(fortunately, R code only uses mutation very rarely)
-
-* plot within a reactive code block <br>(only plot by calling non-reactive code from within `renderPlot`)
-
-* write to a file except, except within `downloadHandler`
-
-unless you know exactly what you are doing, or weird bad things will happen.
+<div style="font-size: 75%">
+Yes. Yes. This is a fertile land and we will thrive. We will rule over all this land! And we will call it… this land!
+</div>
 
 
+### Best practice, what best practice?
+
+Without care, Shiny might create a nightmare scenario:
+
+* Analyses that can be only performed via a UI.
+* Apps that can't be used as a part of larger apps.
+* Complex parameter settings that aren't recorded in either a URL or using R code.
+
+There are ways to avoid this, but they require extra work.
+
+
+## Other options
+
+In R, the `htmlwidgets` library provides a way to provide HTML/Javascript widgets in R. Various libraries use `htmlwidgets` to wrap Javscript plotting libraries, such as `plotly`. These can be used in static Rmarkdown documents or via Shiny.
+
+In Python, Bokeh offers similar features to both `htmlwidgets` and `shiny`. Bokeh has a heavy emphasis on rendering plots client side, but also has a server component. Bokeh seems to currently lack the "reactive" feature, updates are propagated using event handlers. 
+
+
+## Summing up
+
+Shiny might not be your long-term solution, it's not great at scale, but it's probably your initial prototype.
+
+Shiny and R in general are great for people with just a little computing experience. RStudio Inc has done something amazing in making R and Shiny as accessible as they are. For example, Shiny is a suitable basis for a summer or honours project for undergraduate students.
 
