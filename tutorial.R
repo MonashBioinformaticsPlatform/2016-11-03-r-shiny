@@ -194,6 +194,7 @@ p
 #### ----------------------------
 #### Ronald's test as a Shiny app
 #### ----------------------------
+# 
 
 ui_tea <- fluidPage(
     titlePanel("Ronald's exact test"),
@@ -225,11 +226,22 @@ server_tea <- function(input, output, server) {
 
 shinyApp(ui_tea, server_tea)
 
-
+# 
+#
 #### ---------
 #### Challenge
 #### ---------
-
+# 
+# 1. Use what you have just learned to make this app more responsive.
+# The slow part is the call to the `permutations` function. We would
+# like to avoid re-running this unnecessarily.
+# 
+# 2. In the story, there were four cups of tea first and four cups of
+# milk first, and Muriel was correct all eight times. Can Ronald
+# reasonably reject the idea that Muriel's ability is due to chance?
+# 
+# 
+#
 ## -----------------------------------------------------------
 ## tabsetPanel: what you can't see doesn't need to be computed
 ## -----------------------------------------------------------
@@ -460,14 +472,6 @@ runtime: shiny
 ---
 
 
-if (exists("input"))
-    sliderInput("amount", "Amount", 0, 10, 5)
-if (exists("input"))
-    renderText({ paste0("Amount is ", input$amount) })
 
 
-if (exists("input"))
-    mymodule_ui("mod3")
-if (exists("input"))
-    callModule(mymodule_server, "mod3", multiply_by=9)
 
