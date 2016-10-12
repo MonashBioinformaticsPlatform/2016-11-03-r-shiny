@@ -299,16 +299,32 @@ plotTracks(
 # 
 # 
 #
-## -------------------
-## Pushing back inputs
-## -------------------
+## ---------------
+## Updating inputs
+## ---------------
+
+ui_updater <- fluidPage(
+    titlePanel("Updating inputs demonstration"),
+    textInput("text", "A text input", "I keep saying"),
+    actionButton("button", "A button"))
+
+server_updater <- function(input,output,session) {
+    observeEvent(input$button, {
+        updateTextInput(session, "text", value=paste(input$text, "without a shirt"))
+    })
+}
+
+shinyApp(ui_updater, server_updater)
+
 
 ### --------------------------------
 ### Genome browser challenge, part 2
 ### --------------------------------
 # 
-# Add buttons to your genome browser to navigate left and right, and/or
-# zoom in and out.
+# 1. Add buttons to your genome browser to navigate left and right,
+# using the `shift` function for GRanges.
+# 
+# 2. (Optional, more difficult) Add buttons to zoom in and out.
 # 
 # 
 # 

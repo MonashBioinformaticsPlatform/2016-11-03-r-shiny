@@ -326,15 +326,37 @@ plotTracks(
 ```
 
 
-## Pushing back inputs
+## Updating inputs
 
-One reason you might want to break pure reactivity is to provide a quick way to fill in an input.
+We'll now look at something a little less reactive and more event-driven.
 
+```{r}
+ui_updater <- fluidPage(
+    titlePanel("Updating inputs demonstration"),
+    textInput("text", "A text input", "I keep saying"),
+    actionButton("button", "A button"))
+
+server_updater <- function(input,output,session) {
+    observeEvent(input$button, {
+        updateTextInput(session, "text", value=paste(input$text, "without a shirt"))
+    })
+}
+
+shinyApp(ui_updater, server_updater)
+```
+
+What's going on here?
+
+* The `observeEvent` code is run *only* when the specified input updates. It can be used to observe any input being updated, but using it in combination with an `actionButton` is typical. Unlike other code we've written, the code in the `observeEvent` isn't about getting back to a consistent state, and it isn't idempotent. It matters that it only runs exactly when we want it to -- if it ran when `input$text` changed, we would have an infinite loop!
+
+* `updateTextInput` changes the value of the input. There are corresponding functions for other types of input.
 
 
 ### Genome browser challenge, part 2 {.challenge}
 
-Add buttons to your genome browser to navigate left and right, and/or zoom in and out.
+1. Add buttons to your genome browser to navigate left and right, using the `shift` function for GRanges.
+
+2. (Optional, more difficult) Add buttons to zoom in and out.
 
 
 
@@ -342,9 +364,9 @@ Add buttons to your genome browser to navigate left and right, and/or zoom in an
 
 Shiny modules are reusable parts of a Shiny app. The main issue here is avoiding collisions in the `input` and `output` namespaces.
 
-A Shiny module consists of a function create the UI and function to be called with `callModule` in the server function.
+A Shiny module consists of a function create the UI and a function to be called within the server function using `callModule`.
 
-The UI should prefix all the input and output IDs using `NS( )`.
+The UI should prefix all the input and output IDs using `NS( )`. The `callModule` function magically handles prefixing for the server component.
 
 ```{r}
 ns <- NS("somenamespace")
@@ -393,6 +415,7 @@ server_mult <- function(input, output, session) {
 
 shinyApp(ui_mult, server_mult)
 ```
+
 
 ### Best practice?
 
