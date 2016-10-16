@@ -13,6 +13,8 @@ ui <- fluidPage(
     browser_ui("browser"))
 
 server <- function(input,output,session) {
+    callModule(browser_server, "browser")
+
     output$genes <- DT::renderDataTable(
             server = TRUE,
             selection = "single",
@@ -21,14 +23,9 @@ server <- function(input,output,session) {
     })
 
     observeEvent(input$genes_rows_selected, {
-        if (length(input$genes_rows_selected) != 1)
-            return()
-
         loc <- gene_df$location[input$genes_rows_selected]
         updateTextInput(session, "browser-location_str", value=loc)
     })
-
-    callModule(browser_server, "browser")
 }
 
 shinyApp(ui, server)

@@ -542,7 +542,10 @@ shinyApp(ui_browsermod, server_browsermod)</code></pre>
 <p>DataTables has built-in pagination and search. Only the current page or search results need to be sent to the client, so a DataTable can display a very large data frame without having to send the whole thing over the network.</p>
 <p>DataTables allows rows to be selected, so it can serve as way to select from a large number of items.</p>
 <p>Shiny has an version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use <code>::</code> to specify the one we want.</p>
-<pre class="r"><code>gene_df &lt;- data.frame(
+<pre class="r"><code>library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
+txdb &lt;- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
+
+gene_df &lt;- data.frame(
     gene=names(genes(txdb)), 
     location=as.character(genes(txdb)), 
     row.names=NULL, stringsAsFactors=FALSE)

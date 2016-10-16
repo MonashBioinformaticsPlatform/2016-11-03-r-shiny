@@ -474,6 +474,9 @@ DataTables allows rows to be selected, so it can serve as way to select from a l
 Shiny has an version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use `::` to specify the one we want.
 
 ```{r}
+library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
+txdb <- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
+
 gene_df <- data.frame(
     gene=names(genes(txdb)), 
     location=as.character(genes(txdb)), 

@@ -421,6 +421,9 @@ shinyApp(ui_browsermod, server_browsermod)
 ## DataTables
 ## ----------
 
+library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
+txdb <- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
+
 gene_df <- data.frame(
     gene=names(genes(txdb)),
     location=as.character(genes(txdb)),
