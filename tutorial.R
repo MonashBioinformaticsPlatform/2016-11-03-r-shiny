@@ -475,3 +475,7 @@ runtime: shiny
 
 
 
+
+## -----------------------
+## Solutions to challenges
+## -----------------------

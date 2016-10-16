@@ -423,7 +423,9 @@ Without care, Shiny might create a nightmare scenario:
 
 * Analyses that can be only performed via a UI.
 * Apps that can't be used as a part of larger apps.
-* Complex parameter settings that aren't recorded in either a URL or using R code.
+* Complex parameter settings that aren't recorded in either a URL or using R code. 
+
+( Shiny [supports bookmarking](http://shiny.rstudio.com/articles/bookmarking-state.html), but it isn't enabled by default and requires UI code to be wrapped in `function(request) ...`. )
 
 Ideally the language and library would nudge us away from such a scenario. Shiny seems to be shoving us toward it, by making good practices hard work. To write re-usable code you may need to provide:
 
@@ -561,4 +563,11 @@ if (exists("input"))
 <br><br>
 
 Shiny app objects and app directories can also be shown, as has been done throughout this document, but they are enclosed in an &lt;iframe&gt;, so the size is fixed. The size can be specified with `shinyApp(..., options=list(width=..., height=...))`.
+
+
+## Solutions to challenges
+
+* [Solutions to challenges](https://github.com/MonashBioinformaticsPlatform/2016-11-03-r-shiny/tree/gh-pages/solutions)
+
+
 

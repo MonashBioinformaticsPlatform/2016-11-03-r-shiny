@@ -148,6 +148,7 @@ Monash Bioinformatics Platform<br><h4 class="date"><em>October 2016</em></h4>
 <li><a href="#genome-browser-challenge-part-4">Genome browser challenge, part 4</a></li>
 </ul></li>
 <li><a href="#shiny-in-rmarkdown">Shiny in Rmarkdown</a></li>
+<li><a href="#solutions-to-challenges">Solutions to challenges</a></li>
 </ul>
 </div>
 
@@ -501,6 +502,7 @@ shinyApp(ui_mult, server_mult)</code></pre>
 <li>Apps that can’t be used as a part of larger apps.</li>
 <li>Complex parameter settings that aren’t recorded in either a URL or using R code.</li>
 </ul>
+<p>( Shiny <a href="http://shiny.rstudio.com/articles/bookmarking-state.html">supports bookmarking</a>, but it isn’t enabled by default and requires UI code to be wrapped in <code>function(request) ...</code>. )</p>
 <p>Ideally the language and library would nudge us away from such a scenario. Shiny seems to be shoving us toward it, by making good practices hard work. To write re-usable code you may need to provide:</p>
 <ul>
 <li>The two functions needed to define a module.</li>
@@ -600,6 +602,12 @@ callModule(mymodule_server, &quot;mod3&quot;, multiply_by=9)
 </code></pre>
 <p><br><br></p>
 <p>Shiny app objects and app directories can also be shown, as has been done throughout this document, but they are enclosed in an &lt;iframe&gt;, so the size is fixed. The size can be specified with <code>shinyApp(..., options=list(width=..., height=...))</code>.</p>
+</div>
+<div id="solutions-to-challenges" class="section level2">
+<h2>Solutions to challenges</h2>
+<ul>
+<li><a href="https://github.com/MonashBioinformaticsPlatform/2016-11-03-r-shiny/tree/gh-pages/solutions">Solutions to challenges</a></li>
+</ul>
 </div>
 
 

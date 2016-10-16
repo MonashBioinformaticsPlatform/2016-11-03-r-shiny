@@ -43,6 +43,8 @@ Download these files. `tutorial.R` contains all the code in the "tutorial" link 
 * [Tutorial](http://biotraining.erc.monash.edu:3838/chaos/tutorial) ([static](tutorial.html)) ([.Rmd](tutorial.Rmd))
 * [Slides](http://biotraining.erc.monash.edu:3838/chaos/slides) ([static](slides.html)) ([.Rmd](slides.Rmd))
 
+* [Solutions to challenges](https://github.com/MonashBioinformaticsPlatform/2016-11-03-r-shiny/tree/gh-pages/solutions)
+
 ## Source code
 
 * [GitHub repository](https://github.com/MonashBioinformaticsPlatform/2016-11-03-r-shiny)
