@@ -18,6 +18,11 @@ biocLite(c(
     "Gviz"))
 
 
+# To upgrade an old Bioconductor installation
+source("https://bioconductor.org/biocLite.R")
+biocLite("BiocUpgrade")
+
+
 ## ------------
 ## Hello, world
 ## ------------
@@ -167,8 +172,8 @@ permutations <- function(items)
         function(i) rbind(items[i], permutations(items[-i]))))
 
 tea <- 3
-tea_correct <- 3
-milk <- 2
+milk <- 3
+tea_correct <- 2
 milk_correct <- 2
 
 x <- c(rep(0,tea), rep(1,milk))

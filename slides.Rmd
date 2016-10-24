@@ -9,6 +9,31 @@ output:
 runtime: shiny
 ---
 
+<!--
+To run in presentation mode:
+
+command-F1 to toggle mirroring
+
+rmarkdown::run("slides.Rmd", shiny_args=list(port=1234,launch.browser=F))
+
+Run Chrome
+
+http://127.0.0.1:1234/slides.Rmd?presentme=true
+
+Press "p" in the popup window.
+
+Press ctrl-command-f in original window.
+-->
+
+<style>
+p { color: #000; }
+</style>
+
+
+#
+
+<img style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;" src="images/moog-1573329_1280.jpg">
+
 ## Presenting data on the web
 
 Viewing a website requires:
@@ -22,9 +47,9 @@ So much effort has gone into writing great HTTP clients that display HTML that i
 
 ## Presenting data on the web
 
-There is a spectrum of choices for where to put most of the cleverness and computation.
+There is a spectrum of choices for where to put most of the interface logic and computation.
 
-* Purely client-side -- The server merely serves static files. All the magic happens in Javascript, client-side.
+* Pure client-side -- The server merely serves static files. All the magic happens in Javascript, client-side.
 
 * RESTful -- The server does the heavy lifting, such as accessing large databases, but doesn't keep track of sessions and state. Client-side Javascript still does quite a lot.
 
@@ -39,13 +64,15 @@ Pure client can't work with large data, without heroic efforts (Dalliance).
 
 ## Shiny
 
+<img style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.075" src="images/moog-1573329_1280.jpg">
+
 The `shiny` library makes it easy to build stateful servers. When a user interacts with an "app" it's like using a graphical application written in R.
 
 Because the app is written in R, you have all your favourite libraries for analysis and plotting.
 
-Shiny apps are written in a "reactive" style, which simplifies working out what needs to be updated when the user interacts with an app.
+Shiny apps are written in a "reactive" style -- outputs are automatically updated when input controls are adjusted by the user.
 
-("Reactive" covers a broad field. For example in Javascript, Facebook's React library is vastly different to Functional Reactive Programming offerings such as Bacon and ReactiveX. Shiny being server side, it doesn't attempt real-time reactivity such as animations, and is relatively simple.)
+("Reactive" covers a broad field. For example in Javascript, Facebook's React library is vastly different to Functional Reactive Programming offerings such as Bacon and ReactiveX. Shiny, being server side, doesn't attempt real-time reactivity such as animations, and is relatively simple.)
 
 
 ## Shiny
@@ -74,16 +101,52 @@ Without care, Shiny might create a nightmare scenario:
 There are ways to avoid this, but they require extra work.
 
 
-## Other options
+## Other options -- htmlwidgets
 
-In R, the `htmlwidgets` library provides a way to provide HTML/Javascript widgets in R. Various libraries use `htmlwidgets` to wrap Javscript plotting libraries, such as `plotly`. These can be used in static Rmarkdown documents or via Shiny.
+<img style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2" src="images/htmlwidgets.png">
 
-In Python, Bokeh offers similar features to both `htmlwidgets` and `shiny`. Bokeh has a heavy emphasis on rendering plots client side, but also has a server component. Bokeh seems to currently lack the "reactive" feature, updates are propagated using event handlers. 
+<div style="float: right; width: 50%; font-size: 50%; margin-left: 5em;">
+```{r message=FALSE, fig.width=4, fig.height=3}
+library(plotly)
+library(ggplot2)
+p <- ggplot(mtcars, aes(x=wt,y=mpg)) + 
+    geom_point()
+ggplotly(p)
+```
+</div>
 
+The `htmlwidgets` library provides a way to provide HTML/Javascript widgets in R.
+
+Various libraries use `htmlwidgets` to wrap Javscript plotting libraries, such as `plotly`.
+
+These can be used in static Rmarkdown documents or via Shiny.
+
+## Other options -- Bokeh
+
+<img style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2" src="images/bokeh.png">
+
+Python library with similar features to both `htmlwidgets` and `shiny`.
+
+Bokeh has a heavy emphasis on rendering plots client side, but also has a server component. 
+
+Not "reactive", updates are propagated using event handlers.
 
 ## Summing up
 
 Shiny might not be your long-term solution, it's not great at scale, but it's probably your initial prototype.
 
 Shiny and R in general are great for people with just a little computing experience. RStudio Inc has done something amazing in making R and Shiny as accessible as they are. For example, Shiny is a suitable basis for a summer or honours project for undergraduate students.
+
+
+## Acknowledgements
+
+Adele Baraguhare (Monash Bioinformatics Platform) 
+
+Andrew Pattison (PhD student, RNA Systems Biology Lab) 
+
+have previously taught classes on Shiny at Monash University.
+
+
+
+
 
