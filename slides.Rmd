@@ -42,8 +42,9 @@ Viewing a website requires:
 
 * An HTTP server, running in the language of your choice with all your favourite libraries on the operating system of your choice.
 
+<div class="notes">
 So much effort has gone into writing great HTTP clients that display HTML that it now makes sense to write desktop applications this way as well! An "application" written in this style can run potentially run *anywhere*. Example: RStudio.
-
+</div>
 
 ## Presenting data on the web
 
@@ -53,12 +54,16 @@ There is a spectrum of choices for where to put most of the interface logic and 
 
 * RESTful -- The server does the heavy lifting, such as accessing large databases, but doesn't keep track of sessions and state. Client-side Javascript still does quite a lot.
 
-* Stateful server -- The server keeps track of sessions. It possibly runs a separate process per session.
+* Stateful server -- The server has a session for each client. It may run a separate process per session.
 
 The third option places a lot of load on the server, but is the most flexible.
 
 <div class="notes">
+RESTful can involve loading a session from database for each request.
+
 Pure client can't work with large data, without heroic efforts (Dalliance).
+
+Stateful is more like ssh, etc, but over the web.
 </div>
 
 
@@ -72,8 +77,9 @@ Because the app is written in R, you have all your favourite libraries for analy
 
 Shiny apps are written in a "reactive" style -- outputs are automatically updated when input controls are adjusted by the user.
 
-("Reactive" covers a broad field. For example in Javascript, Facebook's React library is vastly different to Functional Reactive Programming offerings such as Bacon and ReactiveX. Shiny, being server side, doesn't attempt real-time reactivity such as animations, and is relatively simple.)
-
+<div class="notes">
+"Reactive" covers a broad field. For example in Javascript, Facebook's React library is vastly different to Functional Reactive Programming offerings such as Bacon and ReactiveX. Shiny, being server side, doesn't attempt real-time reactivity such as animations, and is relatively simple.
+</div>
 
 ## Shiny
 
@@ -81,7 +87,7 @@ Shiny is developed by RStudio Inc, who so far look like good citizens in the R c
 
 GPL3, code is on GitHub.
 
-While some features integrate with RStudio, Shiny is a standalone library and does not require RStudio. It can be used with just a terminal, a web browser, and R.
+While some features integrate with RStudio, Shiny is stand-alone and can be used with just a terminal, a web browser, and R.
 
 Shiny Server is a webserver that can serve Shiny apps and Shiny-enhanced Rmarkdown documents. Has an open source and a "pro" version. RStudio Inc also sells Shiny app hosting.
 
@@ -90,15 +96,21 @@ Yes. Yes. This is a fertile land and we will thrive. We will rule over all this 
 </div>
 
 
-## Best practice, what best practice?
+## What best practice?
 
-Without care, Shiny might create a nightmare scenario:
+Without care, Shiny might lead to:
 
-* Analyses that can be only performed via a UI.
+* Analyses that can only be performed via a UI.
 * Apps that can't be used as a part of larger apps.
-* Complex parameter settings that aren't recorded in either a URL or using R code.
+* Complex parameter settings that aren't recorded in either a URL or R code.
 
-There are ways to avoid this, but they require extra work.
+There are ways to avoid this in Shiny, but they require extra work.
+
+<div class="notes">
+Will have more to say on this later.
+
+Other languages with more web focus have considered modularity and URLs in *much* greater depth.
+</div>
 
 
 ## Other options -- htmlwidgets
@@ -119,7 +131,8 @@ The `htmlwidgets` library provides a way to provide HTML/Javascript widgets in R
 
 Various libraries use `htmlwidgets` to wrap Javscript plotting libraries, such as `plotly`.
 
-These can be used in static Rmarkdown documents or via Shiny.
+Can be used in static Rmarkdown documents or via Shiny.
+
 
 ## Other options -- Bokeh
 
@@ -134,9 +147,15 @@ Not "reactive", updates are propagated using event handlers.
 
 ## Summing up
 
-Shiny might not be your long-term solution, it's not great at scale, but it's probably your initial prototype.
+Shiny might not be your long-term solution, isn't great at scale, but is probably your initial prototype.
 
-Shiny and R in general are great for people with just a little computing experience. RStudio Inc has done something amazing in making R and Shiny as accessible as they are. For example, Shiny is a suitable basis for a summer or honours project for undergraduate students.
+Shiny and R in general are great for people with just a little computing experience.
+
+Interesting not just as a web app but desktop apps and as part of interactive R usage.
+
+<div class="notes">
+RStudio Inc has done something amazing in making R and Shiny as accessible as they are. For example, Shiny is a suitable basis for a summer or honours project for undergraduate students.
+</div>
 
 
 ## Acknowledgements
