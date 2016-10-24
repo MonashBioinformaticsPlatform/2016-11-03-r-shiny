@@ -125,11 +125,12 @@ These can be used in static Rmarkdown documents or via Shiny.
 
 <img style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2" src="images/bokeh.png">
 
-Python library with similar features to both `htmlwidgets` and `shiny`.
+Python library with features overlapping both `htmlwidgets` packages and `shiny`.
 
-Bokeh has a heavy emphasis on rendering plots client side, but also has a server component. 
+Bokeh has a heavy emphasis on rendering plots client-side, but also has a server component. 
 
 Not "reactive", updates are propagated using event handlers.
+
 
 ## Summing up
 
