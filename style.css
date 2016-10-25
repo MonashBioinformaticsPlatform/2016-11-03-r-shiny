@@ -21,15 +21,19 @@ h1.title {
 h2 {
   font-size: 30px;
 }
+
 h3 {
   font-size: 24px;
 }
+
 h4 {
   font-size: 18px;
 }
+
 h5 {
   font-size: 16px;
 }
+
 h6 {
   font-size: 12px;
 }
@@ -39,8 +43,15 @@ pre {
     margin-right: 4em;
 }
 
+.shiny-frame {
+    margin-left: 4em;
+    margin-right: 4em;
+    border: 1px solid #888;
+    width: 80%;
+}
+
 .challenge {
-    margin: 4em;
+    margin: 2em;
     padding: 2em;
     border: 1px solid black;
     border-radius: 5px;

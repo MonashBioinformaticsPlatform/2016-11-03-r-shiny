@@ -28,7 +28,7 @@ biocLite(c(
     "Gviz"))
 ```
 
-Please make sure you are running R 3.3 and Bioconductor 3.3 or higher. Bioconductor 3.3 in particular is vastly more stable than 3.2. <!-- You can force Bioconductor to upgrade by running `remove.packages("BiocInstaller")`, restarting R, and then following the code above. -->
+Please make sure you are running R 3.3 and Bioconductor 3.3 or higher. Bioconductor 3.3 in particular is vastly more stable than 3.2.
 
 ```{r eval=FALSE}
 # To upgrade an old Bioconductor installation
@@ -242,7 +242,6 @@ permutations <- function(items)
 
 server_tea <- function(input, output, server) {
     output$p_text <- renderText( withProgress(message="Computing p", {
-        cat("Computing p\n")
         x <- c(rep(0,input$tea), rep(1,input$milk))
         y <- c(rep(0,input$tea_correct), rep(1,input$tea-input$tea_correct), 
                rep(0,input$milk-input$milk_correct), rep(1,input$milk_correct))
@@ -250,8 +249,7 @@ server_tea <- function(input, output, server) {
         x_perms <- permutations(x) # <- this is slow
         distribution <- colSums(x_perms == y)
         p <- mean(distribution >= statistic)
-        cat("Done\n")
-        
+
         paste0("p-value is ",p)
     }))
 }

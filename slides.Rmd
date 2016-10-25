@@ -26,7 +26,8 @@ Press ctrl-command-f in original window.
 -->
 
 <style>
-p { color: #000; }
+p, li { color: #000; }
+slides > slide.backdrop { background: #fff; }
 </style>
 
 
@@ -164,7 +165,7 @@ Adele Baraguhare (Monash Bioinformatics Platform)
 
 Andrew Pattison (PhD student, RNA Systems Biology Lab) 
 
-have previously taught classes on Shiny at Monash University.
+* have previously taught classes on Shiny at Monash University.
 
 
 

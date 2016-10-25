@@ -215,7 +215,6 @@ permutations <- function(items)
 
 server_tea <- function(input, output, server) {
     output$p_text <- renderText( withProgress(message="Computing p", {
-        cat("Computing p\n")
         x <- c(rep(0,input$tea), rep(1,input$milk))
         y <- c(rep(0,input$tea_correct), rep(1,input$tea-input$tea_correct),
                rep(0,input$milk-input$milk_correct), rep(1,input$milk_correct))
@@ -223,7 +222,6 @@ server_tea <- function(input, output, server) {
         x_perms <- permutations(x) # <- this is slow
         distribution <- colSums(x_perms == y)
         p <- mean(distribution >= statistic)
-        cat("Done\n")
 
         paste0("p-value is ",p)
     }))

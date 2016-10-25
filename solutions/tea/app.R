@@ -7,6 +7,10 @@ ui <- fluidPage(
     numericInput("milk_correct", "Milk first correctly called", 2),
     textOutput("p_text"))
 
+permutations <- function(items)
+    do.call(cbind, lapply(seq_along(items), 
+        function(i) rbind(items[i], permutations(items[-i]))))
+
 server <- function(input, output, server) {
     x <- reactive( c(rep(0,input$tea), rep(1,input$milk)) )
 
