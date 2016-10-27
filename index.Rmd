@@ -47,7 +47,7 @@ biocLite(c(
     "Gviz"))
 ```
 
-Make sure you are running R 3.3 and Bioconductor 3.3 or higher. Bioconductor 3.3 and higher are much more stable than 3.2.
+Make sure you are running R 3.3 and Bioconductor 3.3, or higher.
 
 ```{r eval=FALSE}
 # To upgrade an old Bioconductor installation
