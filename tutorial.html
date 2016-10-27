@@ -240,7 +240,7 @@ ui_modulo_2 &lt;- fluidPage(
 <h3>App directory upload challenge</h3>
 <ol style="list-style-type: decimal">
 <li><p>Create a directory for an app. Name the directory in a way that will be unique, such as with your own name or a secret identity. We are going to upload it to a shared directory on a server.</p></li>
-<li><p>Save the code from one of the apps above to “app.R” in your directory. Modify the code to look or do something different if you like.</p></li>
+<li><p>Save the code from one of the apps above to “app.R” in your directory. Modify the code to look or do something different if you like, such as plotting your favourite function.</p></li>
 <li><p>Run your app with:</p></li>
 </ol>
 <pre class="r"><code>runApp(&quot;yourdirectoryname&quot;)</code></pre>
@@ -510,7 +510,7 @@ shinyApp(ui_mult, server_mult)</code></pre>
 <div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
 <div id="best-practice" class="section level3">
 <h3>Best practice?</h3>
-<p>Without care, Shiny might create a nightmare scenario:</p>
+<p>Without care, Shiny might create a bit of a nightmare:</p>
 <ul>
 <li>Analyses that can be only performed via a UI.</li>
 <li>Apps that can’t be used as a part of larger apps.</li>
@@ -539,15 +539,15 @@ shinyApp(ui_mult, server_mult)</code></pre>
 <pre class="r"><code># Load your module code
 source(&quot;browser.R&quot;)
 
-ui_browsermod &lt;- fluidPage( 
+ui_usebrowser &lt;- fluidPage( 
     titlePanel(&quot;Using a genome browser module&quot;),
     browser_ui(&quot;browser&quot;))
 
-server_browsermod &lt;- function(input,output,session) {
+server_usebrowser &lt;- function(input,output,session) {
     callModule(browser_server, &quot;browser&quot;)
 }
 
-shinyApp(ui_browsermod, server_browsermod)</code></pre>
+shinyApp(ui_usebrowser, server_usebrowser)</code></pre>
 </div>
 </div>
 <div id="datatables" class="section level2">
@@ -555,7 +555,7 @@ shinyApp(ui_browsermod, server_browsermod)</code></pre>
 <p>DataTables is a very flexible Javascript library for displaying tables, which can be used from Shiny.</p>
 <p>DataTables has built-in pagination and search. Only the current page or search results need to be sent to the client, so a DataTable can display a very large data frame without having to send the whole thing over the network.</p>
 <p>DataTables allows rows to be selected, so it can serve as way to select from a large number of items.</p>
-<p>Shiny has an version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use <code>::</code> to specify the one we want.</p>
+<p>Shiny has a version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use <code>::</code> to specify the one we want.</p>
 <pre class="r"><code>library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
 txdb &lt;- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
 

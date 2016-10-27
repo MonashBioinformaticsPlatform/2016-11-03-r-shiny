@@ -131,7 +131,7 @@ https://www.rstudio.com/products/shiny/download-server/
 
 1. Create a directory for an app. Name the directory in a way that will be unique, such as with your own name or a secret identity. We are going to upload it to a shared directory on a server.
 
-2. Save the code from one of the apps above to "app.R" in your directory. Modify the code to look or do something different if you like.
+2. Save the code from one of the apps above to "app.R" in your directory. Modify the code to look or do something different if you like, such as plotting your favourite function.
 
 3. Run your app with:
 
@@ -438,7 +438,7 @@ shinyApp(ui_mult, server_mult)
 
 ### Best practice?
 
-Without care, Shiny might create a nightmare scenario:
+Without care, Shiny might create a bit of a nightmare:
 
 * Analyses that can be only performed via a UI.
 * Apps that can't be used as a part of larger apps.
@@ -470,15 +470,15 @@ Adapt your genome browser to be a Shiny module. It should be usable with the fol
 # Load your module code
 source("browser.R")
 
-ui_browsermod <- fluidPage( 
+ui_usebrowser <- fluidPage( 
     titlePanel("Using a genome browser module"),
     browser_ui("browser"))
 
-server_browsermod <- function(input,output,session) {
+server_usebrowser <- function(input,output,session) {
     callModule(browser_server, "browser")
 }
 
-shinyApp(ui_browsermod, server_browsermod)
+shinyApp(ui_usebrowser, server_usebrowser)
 ```
 
 
@@ -490,7 +490,7 @@ DataTables has built-in pagination and search. Only the current page or search r
 
 DataTables allows rows to be selected, so it can serve as way to select from a large number of items.
 
-Shiny has an version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use `::` to specify the one we want.
+Shiny has a version of DataTables built in, but the version offered by the DT library is better. Annoyingly they use the same function names, so we need to use `::` to specify the one we want.
 
 ```{r}
 library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)

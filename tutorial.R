@@ -97,7 +97,7 @@ ui_modulo_2 <- fluidPage(
 # 
 # 2. Save the code from one of the apps above to "app.R" in your
 # directory. Modify the code to look or do something different if you
-# like.
+# like, such as plotting your favourite function.
 # 
 # 3. Run your app with:
 # 
@@ -417,15 +417,15 @@ shinyApp(ui_mult, server_mult)
 # Load your module code
 source("browser.R")
 
-ui_browsermod <- fluidPage(
+ui_usebrowser <- fluidPage(
     titlePanel("Using a genome browser module"),
     browser_ui("browser"))
 
-server_browsermod <- function(input,output,session) {
+server_usebrowser <- function(input,output,session) {
     callModule(browser_server, "browser")
 }
 
-shinyApp(ui_browsermod, server_browsermod)
+shinyApp(ui_usebrowser, server_usebrowser)
 
 # 
 # 
