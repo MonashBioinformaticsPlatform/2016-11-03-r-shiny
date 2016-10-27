@@ -2,9 +2,9 @@
 
 
 
-## -----
+## =====
 ## Setup
-## -----
+## =====
 
 install.packages("shiny")
 install.packages("DT")
@@ -23,9 +23,9 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("BiocUpgrade")
 
 
-## ------------
+## ============
 ## Hello, world
-## ------------
+## ============
 
 library(shiny)
 
@@ -40,8 +40,8 @@ app_hello
 class(ui_hello)
 as.character(ui_hello)
 
-class(app_hello)
 
+class(app_hello)
 
 # Various ways of running an app
 runApp(app_hello)
@@ -51,9 +51,9 @@ print(app_hello)
 app_hello
 
 
-## ----------------
+## ================
 ## input and output
-## ----------------
+## ================
 
 ui_modulo <- fluidPage(
     titlePanel("Counting modulo app"),
@@ -71,20 +71,33 @@ server_modulo <- function(input, output, session) {
 shinyApp(ui_modulo, server_modulo, options=list(height=800))
 
 
-## ---------------------------
+# An alternative UI layout
+ui_modulo_2 <- fluidPage(
+    titlePanel("Counting modulo app, sidebar layout"),
+    sidebarLayout(
+        sidebarPanel(
+            sliderInput("modulo", "Modulo", 1, 20, 10),
+            sliderInput("step", "Step", 1, 20, 3),
+            textInput("title", "Plot title", "A plot")),
+        mainPanel(
+            plotOutput("plotout"))))
+
+
+## ===========================
 ## Shiny apps and Shiny Server
-## ---------------------------
+## ===========================
 
 ### ------------------------------
 ### App directory upload challenge
 ### ------------------------------
 # 
 # 1. Create a directory for an app. Name the directory in a way that
-# will be unique, such as with your own name or a secret identity, as we
-# are going to upload it to a server.
+# will be unique, such as with your own name or a secret identity. We
+# are going to upload it to a shared directory on a server.
 # 
 # 2. Save the code from one of the apps above to "app.R" in your
-# directory. Modify the code to do something different if you like.
+# directory. Modify the code to look or do something different if you
+# like.
 # 
 # 3. Run your app with:
 # 
@@ -95,12 +108,10 @@ runApp("yourdirectoryname")
 # 4. Upload your app to our server with `scp`. Your instructor will give
 # you details for how to do this.
 # 
-# 
-# 
 #
-## ---------------------------------------
+## =======================================
 ## Reactive expressions save recomputation
-## ---------------------------------------
+## =======================================
 
 # Example of a reactive expression
 y <- reactive(input$x + 1)
@@ -196,9 +207,9 @@ p
 # slightly silly exercise we will use the above.)
 # 
 #
-#### ----------------------------
+####                             
 #### Ronald's test as a Shiny app
-#### ----------------------------
+####                             
 # 
 
 ui_tea <- fluidPage(
@@ -231,9 +242,9 @@ shinyApp(ui_tea, server_tea)
 
 # 
 #
-#### ---------
+####          
 #### Challenge
-#### ---------
+####          
 # 
 # 1. Use what you have just learned to make this app more responsive.
 # The slow part is the call to the `permutations` function. We would
@@ -243,11 +254,10 @@ shinyApp(ui_tea, server_tea)
 # milk first, and Muriel was correct all eight times. Can Ronald
 # reasonably reject the idea that Muriel's ability is due to chance?
 # 
-# 
 #
-## -----------------------------------------------------------
+## ===========================================================
 ## tabsetPanel: what you can't see doesn't need to be computed
-## -----------------------------------------------------------
+## ===========================================================
 
 ui_tea_tabset <- fluidPage(
     titlePanel("Ronald's exact test"),
@@ -265,9 +275,9 @@ ui_tea_tabset <- fluidPage(
 shinyApp(ui_tea_tabset, server_tea, options=list(height=500))
 
 
-## --------------
+## ==============
 ## Genome browser
-## --------------
+## ==============
 
 ### --------------------------------
 ### Genome browser challenge, part 1
@@ -304,7 +314,7 @@ d2 <- rtracklayer::summary(
     BigWigFile("reverse.bw"), location, n, "max")[[1]]
 data_track <- DataTrack(
     d1, data=rbind(d1$score,-d2$score), groups=c(1,2),
-    name="PAT-seq", type=c("l"), col="#000000")
+    name="PAT-seq", type="l", col="#000000", legend=FALSE)
 
 plotTracks(
     list(axis_track, seq_track, gene_track, data_track),
@@ -314,9 +324,9 @@ plotTracks(
 # 
 # 
 #
-## ---------------
+## ===============
 ## Updating inputs
-## ---------------
+## ===============
 
 ui_updater <- fluidPage(
     titlePanel("Updating inputs demonstration"),
@@ -344,9 +354,9 @@ shinyApp(ui_updater, server_updater)
 # 
 # 
 #
-## -------
+## =======
 ## Modules
-## -------
+## =======
 
 ns <- NS("somenamespace")
 ns("foo")
@@ -420,9 +430,9 @@ shinyApp(ui_browsermod, server_browsermod)
 # 
 # 
 #
-## ----------
+## ==========
 ## DataTables
-## ----------
+## ==========
 
 library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
 txdb <- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
@@ -467,9 +477,9 @@ shinyApp(ui_table, server_table, options=list(height=600))
 # 
 # 
 #
-## ------------------
+## ==================
 ## Shiny in Rmarkdown
-## ------------------
+## ==================
 
 ---
 title: "A title"
@@ -482,6 +492,6 @@ runtime: shiny
 
 
 
-## -----------------------
+## =======================
 ## Solutions to challenges
-## -----------------------
+## =======================

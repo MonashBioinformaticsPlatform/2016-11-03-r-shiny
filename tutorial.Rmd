@@ -55,11 +55,13 @@ Let's explore what we've just created to understand better what is going on.
 ```{r}
 class(ui_hello)
 as.character(ui_hello)
-
-class(app_hello)
 ```
 
+`fluidPage` made an object that generates HTML. Shiny has similar functions for the various inputs and outputs it offers, and for various ways to lay out a page. Shiny also has functions for most HTML tags, such as `p()` and `h1()`. Attributes such as style can be specified as keyword arguments to these functions. Literal HTML can be given using the `HTML()` function.
+
 ```{r eval=FALSE}
+class(app_hello)
+
 # Various ways of running an app
 runApp(app_hello)
 runGadget(app_hello)
@@ -96,6 +98,21 @@ server_modulo <- function(input, output, session) {
 shinyApp(ui_modulo, server_modulo, options=list(height=800))
 ```
 
+Shiny offers various different ways to lay out an app. The sidebar layout is popular. You also have complete freedom to use HTML and CSS as well. Try specifying `style=` in one of the layout functions or add your own `div()`, etc.
+
+```{r}
+# An alternative UI layout
+ui_modulo_2 <- fluidPage(
+    titlePanel("Counting modulo app, sidebar layout"),
+    sidebarLayout(
+        sidebarPanel(
+            sliderInput("modulo", "Modulo", 1, 20, 10),
+            sliderInput("step", "Step", 1, 20, 3),
+            textInput("title", "Plot title", "A plot")),
+        mainPanel(
+            plotOutput("plotout"))))
+```
+
 
 ## Shiny apps and Shiny Server
 
@@ -112,9 +129,9 @@ https://www.rstudio.com/products/shiny/download-server/
 
 ### App directory upload challenge {.challenge}
 
-1. Create a directory for an app. Name the directory in a way that will be unique, such as with your own name or a secret identity, as we are going to upload it to a server.
+1. Create a directory for an app. Name the directory in a way that will be unique, such as with your own name or a secret identity. We are going to upload it to a shared directory on a server.
 
-2. Save the code from one of the apps above to "app.R" in your directory. Modify the code to do something different if you like.
+2. Save the code from one of the apps above to "app.R" in your directory. Modify the code to look or do something different if you like.
 
 3. Run your app with:
 
@@ -123,8 +140,6 @@ runApp("yourdirectoryname")
 ```
 
 4. Upload your app to our server with `scp`. Your instructor will give you details for how to do this.
-
-
 
 ## Reactive expressions save recomputation
 
@@ -263,7 +278,6 @@ shinyApp(ui_tea, server_tea)
 
 2. In the story, there were four cups of tea first and four cups of milk first, and Muriel was correct all eight times. Can Ronald reasonably reject the idea that Muriel's ability is due to chance?
 
-
 ## tabsetPanel: what you can't see doesn't need to be computed
 
 It is possible to divide your up app up into a set of tabs. One very useful thing about this is that outputs on a tab that aren't currently visible aren't immediately recomputed.
@@ -322,7 +336,7 @@ d2 <- rtracklayer::summary(
     BigWigFile("reverse.bw"), location, n, "max")[[1]]
 data_track <- DataTrack(
     d1, data=rbind(d1$score,-d2$score), groups=c(1,2), 
-    name="PAT-seq", type=c("l"), col="#000000")
+    name="PAT-seq", type="l", col="#000000", legend=FALSE)
 
 plotTracks(
     list(axis_track, seq_track, gene_track, data_track),

@@ -22,7 +22,7 @@ plot_genome <- function(location) {
         BigWigFile("reverse.bw"), location, n, "max")[[1]]
     data_track <- DataTrack(
         d1, data=rbind(d1$score,-d2$score), groups=c(1,2), 
-        name="PAT-seq", type=c("l"), col="#000000")
+        name="PAT-seq", type="l", col="#000000", legend=FALSE)
     
     plotTracks(
         list(axis_track, seq_track, gene_track, data_track),

@@ -31,7 +31,7 @@ for line in sys.stdin:
                 challenge_level = n
         if in_challenge:
             line = line.replace("{.challenge}","").rstrip()
-        banner = "#"*n + " " + ("-" if n > 1 else "=") * (len(line)-n-1)
+        banner = "#"*n + " " + (" " if n > 3 else ("-" if n > 2 else "=")) * (len(line)-n-1)
         print banner
         print line
         print banner
