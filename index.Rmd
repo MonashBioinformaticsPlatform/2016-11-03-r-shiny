@@ -27,8 +27,34 @@ output:
 
 [Gviz](https://bioconductor.org/packages/release/bioc/html/Gviz.html) (and see also [ggBio](https://bioconductor.org/packages/release/bioc/html/ggbio.html))
 </div>
-
+<div style="width: 66%">
 This is a tutorial prepared by the [Monash Bioinformatics Platform](http://bioinformatics.erc.monash.edu/) on the Shiny library developed by RStudio, to be presented as part of a [hands on workshop at ABACBS 2016](http://www.abacbs.org/biocasia2016workshop/). Shiny provides an easy way to present R data analysis interactively and over the web.
+
+## Setup
+
+Before the tutorial please install RStudio, and then install packages from CRAN and Bioconductor with the following R code:
+
+```{r eval=FALSE}
+install.packages("shiny")
+install.packages("DT")
+
+source("https://bioconductor.org/biocLite.R")
+biocLite(c(
+    "BSgenome.Scerevisiae.UCSC.sacCer3",
+    "TxDb.Scerevisiae.UCSC.sacCer3.sgdGene",
+    "GenomicRanges",
+    "rtracklayer",
+    "Gviz"))
+```
+
+Make sure you are running R 3.3 and Bioconductor 3.3 or higher. Bioconductor 3.3 in particular is much more stable than 3.2.
+
+```{r eval=FALSE}
+# To upgrade an old Bioconductor installation
+source("https://bioconductor.org/biocLite.R")
+biocLite("BiocUpgrade")
+```
+</div>
 
 ## Files
 
@@ -36,7 +62,7 @@ This is a tutorial prepared by the [Monash Bioinformatics Platform](http://bioin
 * [forward.bw](forward.bw) 
 * [reverse.bw](reverse.bw) 
 
-Download these files. `tutorial.R` contains all the code in the "tutorial" link below. Open `tutorial.R` in RStudio and step through it.
+Download these files. `tutorial.R` contains all the code in the "tutorial" link below. During the tutorial, we will be stepping through `tutorial.R` in RStudio. I'm still making changes to `tutorial.R`, so please download it on the day!
 
 ## Content
 
