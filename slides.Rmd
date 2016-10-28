@@ -112,7 +112,7 @@ if (exists("input"))
 </td><td width="50%" style="vertical-align: top; padding: 1em;">
 **Server**
 
-Declare the R code need to calculate outputs from inputs.
+Declare the R code needed to calculate outputs from inputs.
 
 <br>
 
