@@ -93,8 +93,10 @@ Shiny apps are written in a "reactive" style -- outputs are automatically update
 Web browser, shows inputs and outputs using HTML.
 
 ```{r echo=FALSE}
-numericInput("x","x",1)
-numericInput("y","y",1)
+if (exists("input"))
+  numericInput("x","x",1)
+if (exists("input"))
+  numericInput("y","y",1)
 ```
 
 <br>
@@ -104,7 +106,8 @@ numericInput("y","y",1)
 x + y =
 
 ```{r echo=FALSE}
-renderText(input$x+input$y)
+if (exists("input"))
+   renderText(input$x+input$y)
 ```
 </td><td width="50%" style="vertical-align: top; padding: 1em;">
 **Server**
