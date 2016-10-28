@@ -28,6 +28,7 @@ Press ctrl-command-f in original window.
 <style>
 p, li { color: #000; }
 slides > slide.backdrop { background: #fff; }
+pre { padding: 1em; left: 0; width: 100%; }
 </style>
 
 
@@ -81,6 +82,49 @@ Shiny apps are written in a "reactive" style -- outputs are automatically update
 <div class="notes">
 "Reactive" covers a broad field. For example in Javascript, Facebook's React library is vastly different to Functional Reactive Programming offerings such as Bacon and ReactiveX. Shiny, being server side, doesn't attempt real-time reactivity such as animations, and is relatively simple.
 </div>
+
+##
+
+<img style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.075" src="images/moog-1573329_1280.jpg">
+
+<table><tr><td width="33%" style="vertical-align: top; padding: 1em;">
+**Client**
+
+Web browser, shows inputs and outputs using HTML.
+
+```{r echo=FALSE}
+numericInput("x","x",1)
+numericInput("y","y",1)
+```
+
+<br>
+<br>
+<br>
+
+x + y =
+
+```{r echo=FALSE}
+renderText(input$x+input$y)
+```
+</td><td width="50%" style="vertical-align: top; padding: 1em;">
+**Server**
+
+Declare the R code need to calculate outputs from inputs.
+
+<br>
+
+&searr;
+
+```{r eval=FALSE}
+output$text <- 
+  renderText({ 
+    input$x+input$y 
+  })
+```
+
+&swarr;
+
+</td></tr></table>
 
 ## Shiny
 
@@ -165,7 +209,7 @@ Adele Baraguhare (Monash Bioinformatics Platform)
 
 Andrew Pattison (PhD student, RNA Systems Biology Lab) 
 
-* have previously taught classes on Shiny at Monash University.
+have previously taught classes on Shiny at Monash University.
 
 
 
