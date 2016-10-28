@@ -199,7 +199,7 @@ Shiny might not be your long-term solution, isn't great at scale, but is probabl
 
 Shiny and R in general are great for people with just a little computing experience.
 
-Interesting not just as a web app but desktop apps and as part of interactive R usage.
+Interesting not just for web apps but desktop apps and as part of interactive R usage.
 
 <div class="notes">
 RStudio Inc has done something amazing in making R and Shiny as accessible as they are. For example, Shiny is a suitable basis for a summer or honours project for undergraduate students.
