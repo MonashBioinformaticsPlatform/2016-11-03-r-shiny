@@ -32,7 +32,12 @@ This is a tutorial prepared by the [Monash Bioinformatics Platform](http://bioin
 
 ## Setup
 
-Before the tutorial please install RStudio, and then install packages from CRAN and Bioconductor with the following R code:
+Before the tutorial please install R and RStudio,
+
+* [Download R](https://cran.rstudio.com/)
+* [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+then install packages from CRAN and Bioconductor with the following R code:
 
 ```{r eval=FALSE}
 install.packages("shiny")
