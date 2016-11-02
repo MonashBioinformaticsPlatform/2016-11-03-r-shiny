@@ -52,7 +52,7 @@ So much effort has gone into writing great HTTP clients that display HTML that i
 
 There is a spectrum of choices for where to put most of the interface logic and computation.
 
-* Pure client-side -- The server merely serves static files. All the magic happens in Javascript, client-side.
+* Pure client-side -- The server merely serves static files. All the magic happens in Javascript, client-side. Example: `Glimma`
 
 * RESTful -- The server does the heavy lifting, such as accessing large databases, but doesn't keep track of sessions and state. Client-side Javascript still does quite a lot.
 

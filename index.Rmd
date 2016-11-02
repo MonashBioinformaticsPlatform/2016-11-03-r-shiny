@@ -28,7 +28,7 @@ output:
 [Gviz](https://bioconductor.org/packages/release/bioc/html/Gviz.html) (and see also [ggbio](https://bioconductor.org/packages/release/bioc/html/ggbio.html))
 </div>
 <div style="width: 66%">
-This is a tutorial prepared by the [Monash Bioinformatics Platform](http://bioinformatics.erc.monash.edu/) on the Shiny library developed by RStudio, to be presented as part of a [hands on workshop at ABACBS 2016](http://www.abacbs.org/biocasia2016workshop/). Shiny provides an easy way to present R data analysis interactively and over the web.
+This is a tutorial prepared by the [Monash Bioinformatics Platform](http://bioinformatics.erc.monash.edu/) on the Shiny library developed by RStudio, to be presented as part of a [hands on workshop as part of ABACBS 2016 and bioCasia2016](http://www.abacbs.org/biocasia2016workshop/). Shiny provides an easy way to present R data analysis interactively and over the web.
 
 ## Setup
 
